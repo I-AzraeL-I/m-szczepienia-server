@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Entity
 @Getter
@@ -20,9 +21,11 @@ public class Address {
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     private City city;
 
-    @NotBlank
+    @NotBlank(message = "Street is mandatory")
+    @Size(min = 3, max = 50, message = "Street length must be between {min} and {max}")
     private String street;
 
-    @NotBlank
+    @NotBlank(message = "Number is mandatory")
+    @Size(min = 1, max = 10, message = "Number length must be between {min} and {max}")
     private String number;
 }

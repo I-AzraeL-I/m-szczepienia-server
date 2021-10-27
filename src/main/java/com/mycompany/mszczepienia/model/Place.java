@@ -48,4 +48,14 @@ public class Place {
         vaccines.remove(vaccine);
         vaccine.setPlace(null);
     }
+
+    public void addWorkDay(WorkDay workDay) {
+        workDays.add(workDay);
+        workDay.setPlace(this);
+    }
+
+    public void removeWorkDay(WorkDay workDay) {
+        workDays.remove(workDay);
+        workDay.setPlace(null);
+    }
 }
