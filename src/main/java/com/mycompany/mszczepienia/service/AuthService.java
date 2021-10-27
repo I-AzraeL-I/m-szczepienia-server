@@ -11,7 +11,7 @@ public class AuthService {
     private static final String PASSWORD = "password";
 
     public String login(LoginFormDto loginFormDto) {
-        if (loginFormDto.getLogin().equals(USERNAME) && loginFormDto.getPassword().equals(PASSWORD)) {
+        if (loginFormDto.getEmail().equals(USERNAME) && loginFormDto.getPassword().equals(PASSWORD)) {
             return "Ok";
         } else {
             throw new InvalidCredentialsException("Given credentials are invalid");
