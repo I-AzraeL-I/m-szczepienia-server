@@ -46,10 +46,6 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Patient> patients = new ArrayList<>();
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "address_id")
-    private Address address;
-
     public void addPatient(Patient patient) {
         patients.add(patient);
         patient.setUser(this);

@@ -33,6 +33,10 @@ public class Patient {
     @PESEL(message = "Invalid pesel format")
     private String pesel;
 
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "address_id")
+    private Address address;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private User user;
 
