@@ -6,22 +6,16 @@ import com.mycompany.mszczepienia.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@SpringBootTest
 @DataJpaTest
 @RequiredArgsConstructor
 public class PersistenceTests {
 
-    @PersistenceContext
-    private final EntityManager entityManager;
-
+    private final TestEntityManager entityManager;
     private final CityRepository cityRepository;
     private final DiseaseRepository diseaseRepository;
     private final ManufacturerRepository manufacturerRepository;
