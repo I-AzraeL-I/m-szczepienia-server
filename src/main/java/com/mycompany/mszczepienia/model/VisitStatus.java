@@ -7,6 +7,7 @@ public enum VisitStatus {
 
     PENDING("PENDING"),
     FINISHED("FINISHED"),
+    MISSED("MISSED"),
     CANCELLED("CANCELLED");
 
     public final String status;

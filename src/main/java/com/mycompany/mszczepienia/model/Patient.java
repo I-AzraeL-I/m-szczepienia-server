@@ -39,7 +39,7 @@ public class Patient {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Patient )) return false;
+        if (!(o instanceof Patient)) return false;
         return id != null && id.equals(((Patient) o).getId());
     }
 
