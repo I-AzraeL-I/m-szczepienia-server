@@ -29,7 +29,7 @@ public class Patient {
     @Size(min = 3, max = 100, message = "Last name length must be between {min} and {max}")
     private String lastName;
 
-    @Column(nullable = false)
+    @Column(unique = true)
     @PESEL(message = "Invalid pesel format")
     private String pesel;
 
