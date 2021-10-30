@@ -1,6 +1,9 @@
 package com.mycompany.mszczepienia.controller;
 
-import com.mycompany.mszczepienia.dto.LoginFormDto;
+import com.mycompany.mszczepienia.dto.auth.JwtDto;
+import com.mycompany.mszczepienia.dto.auth.LoginRequestDto;
+import com.mycompany.mszczepienia.dto.auth.RefreshTokenDto;
+import com.mycompany.mszczepienia.dto.auth.RefreshTokenRequestDto;
 import com.mycompany.mszczepienia.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +22,12 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@Valid @RequestBody LoginFormDto loginFormDto) {
-        return ResponseEntity.ok(authService.login(loginFormDto));
+    public ResponseEntity<JwtDto> login(@Valid @RequestBody LoginRequestDto loginRequestDto) {
+        return ResponseEntity.ok(authService.login(loginRequestDto));
+    }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<RefreshTokenDto> refreshToken(@Valid @RequestBody RefreshTokenRequestDto request) {
+        return ResponseEntity.ok(authService.refreshToken(request));
     }
 }

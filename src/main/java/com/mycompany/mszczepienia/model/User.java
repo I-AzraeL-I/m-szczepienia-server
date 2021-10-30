@@ -1,6 +1,7 @@
 package com.mycompany.mszczepienia.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.mycompany.mszczepienia.security.JwtProperties;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -59,7 +60,7 @@ public class User implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
-        GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + role);
+        GrantedAuthority authority = new SimpleGrantedAuthority(JwtProperties.TOKEN_PREFIX_ROLE + role);
         authorities.add(authority);
         return authorities;
     }
