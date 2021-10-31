@@ -1,10 +1,11 @@
 package com.mycompany.mszczepienia.security;
 
-import com.mycompany.mszczepienia.service.AuthService;
+import com.mycompany.mszczepienia.service.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -25,12 +26,12 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    private final AuthService authService;
+    private final UserDetailsServiceImpl userDetailsService;
     private final AuthEntryPoint unauthorizedHandler;
 
     @Override
     public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-        authenticationManagerBuilder.userDetailsService(authService).passwordEncoder(passwordEncoder());
+        authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
 
     @Override
@@ -68,11 +69,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Bean
     public RoleHierarchy roleHierarchy() {
         var hierarchy = new RoleHierarchyImpl();
-        var prefix = JwtProperties.TOKEN_PREFIX_ROLE;
         hierarchy.setHierarchy(String.format("%1$s > %2$s\n%1$s > %3$s\n%3$s > %2$s",
-                prefix + Role.ADMIN.value,
-                prefix + Role.USER.value,
-                prefix + Role.MODERATOR.value));
+                Role.ADMIN.value,
+                Role.USER.value,
+                Role.MODERATOR.value));
         return hierarchy;
     }
 
@@ -84,5 +84,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Bean
     public AuthTokenFilter authenticationJwtTokenFilter() {
         return new AuthTokenFilter();
+    }
+
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 }

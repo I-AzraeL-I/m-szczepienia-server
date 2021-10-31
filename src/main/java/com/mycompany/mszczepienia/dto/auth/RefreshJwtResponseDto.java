@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class RefreshTokenDto {
+public class RefreshJwtResponseDto {
 
     private final String type = "Bearer";
 

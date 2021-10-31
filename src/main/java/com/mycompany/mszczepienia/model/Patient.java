@@ -6,7 +6,6 @@ import lombok.Setter;
 import org.hibernate.validator.constraints.pl.PESEL;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Entity
@@ -20,20 +19,21 @@ public class Patient {
     private Long id;
 
     @Column(nullable = false)
-    @NotBlank(message = "First name is mandatory")
-    @Size(min = 3, max = 100, message = "First name length must be between {min} and {max}")
+    @Size(min = 1, max = 100, message = "First name length must be between {min} and {max}")
     private String firstName;
 
     @Column(nullable = false)
-    @NotBlank(message = "Last name is mandatory")
-    @Size(min = 3, max = 100, message = "Last name length must be between {min} and {max}")
+    @Size(min = 1, max = 100, message = "Last name length must be between {min} and {max}")
     private String lastName;
 
     @Column(unique = true)
     @PESEL(message = "Invalid pesel format")
     private String pesel;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
+    @Column(nullable = false)
+    private boolean isMainProfile;
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "address_id")
     private Address address;
 

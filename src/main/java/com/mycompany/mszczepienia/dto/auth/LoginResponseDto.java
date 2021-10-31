@@ -9,7 +9,7 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-public class JwtDto {
+public class LoginResponseDto {
 
     private final String type = "Bearer";
 

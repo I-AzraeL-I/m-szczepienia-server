@@ -1,7 +1,6 @@
 package com.mycompany.mszczepienia.security;
 
-import com.mycompany.mszczepienia.service.AuthService;
-import lombok.RequiredArgsConstructor;
+import com.mycompany.mszczepienia.service.UserDetailsServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.lang.NonNull;
@@ -18,14 +17,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@RequiredArgsConstructor
 @Slf4j
 public class AuthTokenFilter extends OncePerRequestFilter {
 
-    @Autowired
-    private JwtUtils jwtUtils;
-    @Autowired
-    private AuthService authService;
+    @Autowired private JwtUtils jwtUtils;
+    @Autowired private UserDetailsServiceImpl userDetailsService;
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
@@ -34,10 +30,10 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         try {
             String jwt = parseJwt(request);
-            if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
-                String username = jwtUtils.getAllClaimsFromJwtToken(jwt).getSubject();
+            if (jwt != null && jwtUtils.isJwtValid(jwt)) {
+                String username = jwtUtils.getAllClaimsFromJwt(jwt).getSubject();
 
-                UserDetails userDetails = authService.loadUserByUsername(username);
+                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

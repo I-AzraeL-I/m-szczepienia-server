@@ -18,24 +18,39 @@ public class JwtUtils {
     @Value("${app.jwtExpirationMs}")
     private int jwtExpirationMs;
 
-    public String generateJwtToken(UserDto userDto) {
+    @Value("${app.jwtRefreshExpirationMs}")
+    private int jwtRefreshExpirationMs;
+
+    public String generateJwt(UserDto userDto) {
+        return generateTokenWithExpiration(userDto, jwtExpirationMs);
+    }
+
+    public String generateRefreshJwt(UserDto userDto) {
+        return generateTokenWithExpiration(userDto, jwtRefreshExpirationMs);
+    }
+
+    private String generateTokenWithExpiration(UserDto userDto, int tokenExpirationMs) {
         return Jwts.builder()
                 .setSubject(userDto.getEmail())
-                .claim(JwtProperties.TOKEN_CLAIM_AUTHORITIES.value, JwtProperties.TOKEN_PREFIX_ROLE + userDto.getRole())
+                .claim(JwtProperties.TOKEN_CLAIM_AUTHORITIES.value, userDto.getRole())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date((new Date()).getTime() + jwtExpirationMs))
+                .setExpiration(new Date((new Date()).getTime() + tokenExpirationMs))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();
     }
 
-    public Claims getAllClaimsFromJwtToken(String token) {
+    public Claims getAllClaimsFromJwt(String token) {
         return Jwts.parser()
                 .setSigningKey(jwtSecret)
                 .parseClaimsJws(token)
                 .getBody();
     }
 
-    public boolean validateJwtToken(String authToken) {
+    public String getSubjectFromJwt(String token) {
+        return getAllClaimsFromJwt(token).getSubject();
+    }
+
+    public boolean isJwtValid(String authToken) {
         try {
             Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(authToken);
             return true;

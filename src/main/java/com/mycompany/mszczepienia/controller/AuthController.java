@@ -1,9 +1,6 @@
 package com.mycompany.mszczepienia.controller;
 
-import com.mycompany.mszczepienia.dto.auth.JwtDto;
-import com.mycompany.mszczepienia.dto.auth.LoginRequestDto;
-import com.mycompany.mszczepienia.dto.auth.RefreshTokenDto;
-import com.mycompany.mszczepienia.dto.auth.RefreshTokenRequestDto;
+import com.mycompany.mszczepienia.dto.auth.*;
 import com.mycompany.mszczepienia.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +19,18 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<JwtDto> login(@Valid @RequestBody LoginRequestDto loginRequestDto) {
+    public ResponseEntity<LoginResponseDto> login(@Valid @RequestBody LoginRequestDto loginRequestDto) {
         return ResponseEntity.ok(authService.login(loginRequestDto));
     }
 
+    @PostMapping("/register")
+    public ResponseEntity<String> register(@Valid @RequestBody RegisterRequestDto registerRequestDto) {
+        authService.register(registerRequestDto);
+        return ResponseEntity.ok("Ok");
+    }
+
     @PostMapping("/refresh")
-    public ResponseEntity<RefreshTokenDto> refreshToken(@Valid @RequestBody RefreshTokenRequestDto request) {
-        return ResponseEntity.ok(authService.refreshToken(request));
+    public ResponseEntity<RefreshJwtResponseDto> refreshToken(@Valid @RequestBody RefreshJwtRequestDto refreshJwtRequestDto) {
+        return ResponseEntity.ok(authService.refreshToken(refreshJwtRequestDto));
     }
 }

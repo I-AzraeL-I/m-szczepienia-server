@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter
-public class RefreshTokenRequestDto {
+public class RefreshJwtRequestDto {
 
     @NotBlank
     private String refreshToken;
