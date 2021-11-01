@@ -4,9 +4,13 @@ import com.mycompany.mszczepienia.dto.auth.UserDto;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @Slf4j
@@ -29,16 +33,6 @@ public class JwtUtils {
         return generateTokenWithExpiration(userDto, jwtRefreshExpirationMs);
     }
 
-    private String generateTokenWithExpiration(UserDto userDto, int tokenExpirationMs) {
-        return Jwts.builder()
-                .setSubject(userDto.getEmail())
-                .claim(JwtProperties.TOKEN_CLAIM_AUTHORITIES.value, userDto.getRole())
-                .setIssuedAt(new Date())
-                .setExpiration(new Date((new Date()).getTime() + tokenExpirationMs))
-                .signWith(SignatureAlgorithm.HS512, jwtSecret)
-                .compact();
-    }
-
     public Claims getAllClaimsFromJwt(String token) {
         return Jwts.parser()
                 .setSigningKey(jwtSecret)
@@ -48,6 +42,15 @@ public class JwtUtils {
 
     public String getSubjectFromJwt(String token) {
         return getAllClaimsFromJwt(token).getSubject();
+    }
+
+    public List<GrantedAuthority> getAuthoritiesFromJwt(String token) {
+        @SuppressWarnings("unchecked")
+        var authorities = (List<String>) getAllClaimsFromJwt(token).get(JwtProperties.TOKEN_CLAIM_AUTHORITIES.value);
+
+        return authorities.stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toUnmodifiableList());
     }
 
     public boolean isJwtValid(String authToken) {
@@ -67,6 +70,16 @@ public class JwtUtils {
         }
 
         return false;
+    }
+
+    private String generateTokenWithExpiration(UserDto userDto, int tokenExpirationMs) {
+        return Jwts.builder()
+                .setSubject(userDto.getEmail())
+                .claim(JwtProperties.TOKEN_CLAIM_AUTHORITIES.value, List.of(userDto.getRole()))
+                .setIssuedAt(new Date())
+                .setExpiration(new Date((new Date()).getTime() + tokenExpirationMs))
+                .signWith(SignatureAlgorithm.HS512, jwtSecret)
+                .compact();
     }
 
 }

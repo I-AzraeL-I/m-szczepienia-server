@@ -31,17 +31,18 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PatientRepository patientRepository;
     private final AuthenticationManager authenticationManager;
-
     private final JwtUtils jwtUtils;
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
 
+    @Transactional(readOnly = true)
     public UserDto findUserById(Long id) {
         var user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id.toString(), "User not found"));
         return modelMapper.map(user, UserDto.class);
     }
 
+    @Transactional(readOnly = true)
     public UserDto findUserByEmail(String email) {
         var user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException(email, "User not found"));
@@ -50,8 +51,8 @@ public class AuthService {
 
     @Transactional
     public LoginResponseDto login(LoginRequestDto loginRequestDto) {
-        var authentication = authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(loginRequestDto.getEmail(), loginRequestDto.getPassword()));
+        var authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(loginRequestDto.getEmail(), loginRequestDto.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         var user = (User) authentication.getPrincipal();
@@ -60,7 +61,7 @@ public class AuthService {
         String refreshJwt = jwtUtils.generateRefreshJwt(userDto);
         List<String> roles = user.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.toList());
+                .collect(Collectors.toUnmodifiableList());
 
         return LoginResponseDto.builder()
                 .email(user.getEmail())
