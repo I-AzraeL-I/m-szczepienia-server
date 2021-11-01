@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/tests
+    username: postgres
+    password: postgres
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+app:
+  jwtSecret: secretKey
+  jwtExpirationMs: 3600000
+  jwtRefreshExpirationMs: 86400000
