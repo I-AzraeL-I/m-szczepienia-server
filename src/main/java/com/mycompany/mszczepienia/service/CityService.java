@@ -18,6 +18,6 @@ public class CityService {
 
     public List<CityDto> findAllByNameContaining(String name) {
         var cityDtoListType = new TypeToken<List<CityDto>>() {}.getType();
-        return modelMapper.map(cityRepository.findAllByNameContainingOrderByName(name), cityDtoListType);
+        return modelMapper.map(cityRepository.findAllByNameContainingIgnoreCaseOrderByName(name), cityDtoListType);
     }
 }

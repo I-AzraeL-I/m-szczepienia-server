@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -22,20 +25,19 @@ public class Vaccine {
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     private Disease disease;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    private Place place;
-
-    private int quantity;
+    @OneToMany(mappedBy = "vaccine", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<PlaceVaccine> places = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Vaccine )) return false;
-        return id != null && id.equals(((Vaccine) o).getId());
+        if (o == null || getClass() != o.getClass()) return false;
+        Vaccine vaccine = (Vaccine) o;
+        return Objects.equals(id, vaccine.id);
     }
 
     @Override
     public int hashCode() {
-        return getClass().hashCode();
+        return Objects.hash(id);
     }
 }

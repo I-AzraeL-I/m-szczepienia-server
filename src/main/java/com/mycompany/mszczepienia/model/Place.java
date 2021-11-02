@@ -7,7 +7,9 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -30,7 +32,7 @@ public class Place {
     private Address address;
 
     @OneToMany(mappedBy = "place", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Vaccine> vaccines = new ArrayList<>();
+    private List<PlaceVaccine> vaccines = new ArrayList<>();
 
     @OneToMany(mappedBy = "place", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WorkDay> workDays = new ArrayList<>();
@@ -39,14 +41,22 @@ public class Place {
     @JoinColumn(name = "moderator_id")
     private User moderator;
 
-    public void addVaccine(Vaccine vaccine) {
-        vaccines.add(vaccine);
-        vaccine.setPlace(this);
+    public void addVaccine(Vaccine vaccine, long quantity) {
+        var placeVaccine = new PlaceVaccine(this, vaccine, quantity);
+        vaccines.add(placeVaccine);
+        vaccine.getPlaces().add(placeVaccine);
     }
 
     public void removeVaccine(Vaccine vaccine) {
-        vaccines.remove(vaccine);
-        vaccine.setPlace(null);
+        for (Iterator<PlaceVaccine> iterator = vaccines.iterator(); iterator.hasNext(); ) {
+            PlaceVaccine placeVaccine = iterator.next();
+            if (placeVaccine.getPlace().equals(this) && placeVaccine.getVaccine().equals(vaccine)) {
+                iterator.remove();
+                placeVaccine.getVaccine().getPlaces().remove(placeVaccine);
+                placeVaccine.setPlace(null);
+                placeVaccine.setVaccine(null);
+            }
+        }
     }
 
     public void addWorkDay(WorkDay workDay) {
@@ -57,5 +67,19 @@ public class Place {
     public void removeWorkDay(WorkDay workDay) {
         workDays.remove(workDay);
         workDay.setPlace(null);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Place place = (Place) o;
+        return Objects.equals(name, place.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
     }
 }

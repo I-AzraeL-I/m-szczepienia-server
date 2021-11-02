@@ -9,5 +9,5 @@ import java.util.List;
 @Repository
 public interface CityRepository extends JpaRepository<City, Long> {
 
-    List<City> findAllByNameContainingOrderByName(String city);
+    List<City> findAllByNameContainingIgnoreCaseOrderByName(String city);
 }

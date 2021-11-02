@@ -1,13 +1,13 @@
 package com.mycompany.mszczepienia.repository;
 
-import com.mycompany.mszczepienia.model.Disease;
+import com.mycompany.mszczepienia.model.Vaccine;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface DiseaseRepository extends JpaRepository<Disease, Long> {
+public interface VaccineRepository extends JpaRepository<Vaccine, Long> {
 
-    List<Disease> findAllByNameContainingIgnoreCaseOrderByName(String name);
+    List<Vaccine> findAllByDisease_Id(Long diseaseId);
 }
