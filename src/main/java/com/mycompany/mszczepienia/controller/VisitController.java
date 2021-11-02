@@ -19,7 +19,7 @@ public class VisitController {
 
     private final VisitService visitService;
 
-    @GetMapping("")
+    @GetMapping("/find")
     public ResponseEntity<FreeVisitsDto> getFreeVisits(@RequestParam @DateTimeFormat(pattern="yyyy-MM-dd") LocalDate date,
                                                        @RequestParam Long placeId,
                                                        @RequestParam Long vaccineId) {
