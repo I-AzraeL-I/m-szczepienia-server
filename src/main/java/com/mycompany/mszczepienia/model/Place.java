@@ -12,6 +12,8 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@NamedEntityGraph(name = "Place.address",
+        attributeNodes = @NamedAttributeNode("address"))
 public class Place {
 
     @Id
@@ -33,7 +35,7 @@ public class Place {
     @OneToMany(mappedBy = "place", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WorkDay> workDays = new ArrayList<>();
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "moderator_id")
     private User moderator;
 

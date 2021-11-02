@@ -5,6 +5,9 @@ spring:
     password: ${SPRING_DATASOURCE_PASSWORD}
   jpa:
     database-platform: ${SPRING_JPA_DATABASE-PLATFORM}
+  sql:
+    init:
+      data-locations: classpath:data.sql
 app:
   jwtSecret: ${JWT_SECRET}
   jwtExpirationMs: ${JWT_EXPIRATION_MS}
