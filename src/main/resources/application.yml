@@ -5,8 +5,10 @@ spring:
     password: ${SPRING_DATASOURCE_PASSWORD}
   jpa:
     database-platform: ${SPRING_JPA_DATABASE-PLATFORM}
+    defer-datasource-initialization: true
   sql:
     init:
+      mode: always
       data-locations: classpath:data.sql
 app:
   jwtSecret: ${JWT_SECRET}
