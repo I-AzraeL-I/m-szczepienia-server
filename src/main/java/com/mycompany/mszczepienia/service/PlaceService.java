@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -16,6 +17,7 @@ public class PlaceService {
     private final PlaceRepository placeRepository;
     private final ModelMapper modelMapper;
 
+    @Transactional(readOnly = true)
     public List<PlaceDto> findAllByCityId(Long cityId) {
         var placeDtoListType = new TypeToken<List<PlaceDto>>() {}.getType();
         return modelMapper.map(placeRepository.findAllByAddress_City_IdOrderByName(cityId), placeDtoListType);

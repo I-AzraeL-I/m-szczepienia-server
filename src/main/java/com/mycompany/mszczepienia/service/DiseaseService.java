@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -16,6 +17,7 @@ public class DiseaseService {
     private final DiseaseRepository diseaseRepository;
     private final ModelMapper modelMapper;
 
+    @Transactional(readOnly = true)
     public List<DiseaseDto> findAllByNameContaining(String name) {
         var diseaseDtoListType = new TypeToken<List<DiseaseDto>>() {}.getType();
         return modelMapper.map(diseaseRepository.findAllByNameContainingIgnoreCaseOrderByName(name), diseaseDtoListType);
