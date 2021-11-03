@@ -12,6 +12,13 @@ import java.util.Objects;
 @Entity
 @Getter
 @Setter
+@NamedEntityGraph(
+        name = "vaccine.manufacturer+disease",
+        attributeNodes = {
+                @NamedAttributeNode("manufacturer"),
+                @NamedAttributeNode("disease")
+        }
+)
 public class Vaccine {
 
     @Id
@@ -19,10 +26,10 @@ public class Vaccine {
     @Setter(AccessLevel.NONE)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Manufacturer manufacturer;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Disease disease;
 
     @OneToMany(mappedBy = "vaccine", cascade = CascadeType.ALL, orphanRemoval = true)

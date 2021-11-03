@@ -7,10 +7,22 @@ spring:
     hibernate:
       ddl-auto: create-drop
     defer-datasource-initialization: true
+    properties:
+      hibernate:
+        format_sql: true
   sql:
     init:
       mode: always
       data-locations: classpath:data.sql
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+        type:
+          descriptor:
+            sql:
+              BasicBinder: TRACE
 app:
   jwtSecret: secretKey
   jwtExpirationMs: 3600000

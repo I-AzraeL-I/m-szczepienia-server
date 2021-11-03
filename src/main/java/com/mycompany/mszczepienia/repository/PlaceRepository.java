@@ -10,6 +10,6 @@ import java.util.List;
 @Repository
 public interface PlaceRepository extends JpaRepository<Place, Long> {
 
-    @EntityGraph("Place.address")
+    @EntityGraph("place.address.city.voivodeship")
     List<Place> findAllByAddress_City_IdOrderByName(Long cityId);
 }

@@ -18,7 +18,7 @@ public class Address {
     @Setter(AccessLevel.NONE)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private City city;
 
     @NotBlank(message = "Street is mandatory")

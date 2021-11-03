@@ -14,8 +14,18 @@ import java.util.Objects;
 @Entity
 @Getter
 @Setter
-@NamedEntityGraph(name = "Place.address",
-        attributeNodes = @NamedAttributeNode("address"))
+@NamedEntityGraph(
+        name = "place.address.city.voivodeship",
+        attributeNodes = @NamedAttributeNode(value = "address", subgraph = "address.city"),
+        subgraphs = {
+                @NamedSubgraph(
+                        name = "address.city",
+                        attributeNodes = @NamedAttributeNode(value = "city", subgraph = "city.voivodeship")),
+                @NamedSubgraph(
+                        name = "city.voivodeship",
+                        attributeNodes = @NamedAttributeNode("voivodeship"))
+        }
+)
 public class Place {
 
     @Id
