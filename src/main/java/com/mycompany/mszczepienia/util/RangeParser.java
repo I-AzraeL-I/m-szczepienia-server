@@ -27,7 +27,7 @@ public class RangeParser {
         rangeSet.remove(Range.closed(from, to));
     }
 
-    public List<LocalTime> toLowerEndpointList(long duration, ChronoUnit chronoUnit) {
+    public List<LocalTime> parseToStartTimeList(long duration, ChronoUnit chronoUnit) {
         Stream.iterate(startTime, step -> step.compareTo(endTime) <= 0, step -> step.plus(duration, chronoUnit))
                 .forEach(step -> rangeSet.remove(Range.closed(step, step)));
         return rangeSet.asRanges().stream()

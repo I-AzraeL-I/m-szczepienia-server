@@ -1,4 +1,4 @@
-package com.mycompany.mszczepienia.dto.appointment;
+package com.mycompany.mszczepienia.dto.visit;
 
 import lombok.*;
 

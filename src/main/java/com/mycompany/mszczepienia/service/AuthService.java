@@ -49,7 +49,7 @@ public class AuthService {
         return modelMapper.map(user, UserDto.class);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public LoginResponseDto login(LoginRequestDto loginRequestDto) {
         var authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequestDto.getEmail(), loginRequestDto.getPassword()));
@@ -89,7 +89,7 @@ public class AuthService {
         userRepository.save(user);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public RefreshJwtResponseDto refreshToken(RefreshJwtRequestDto refreshJwtRequestDto) {
         String refreshToken = refreshJwtRequestDto.getRefreshToken();
 

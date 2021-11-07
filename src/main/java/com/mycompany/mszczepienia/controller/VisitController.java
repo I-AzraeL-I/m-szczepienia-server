@@ -1,6 +1,6 @@
 package com.mycompany.mszczepienia.controller;
 
-import com.mycompany.mszczepienia.dto.appointment.FreeVisitsDto;
+import com.mycompany.mszczepienia.dto.visit.FreeVisitsDto;
 import com.mycompany.mszczepienia.service.VisitService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
