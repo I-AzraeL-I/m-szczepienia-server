@@ -12,6 +12,10 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @Setter
 @Immutable
+@NamedEntityGraph(
+        name = "city.voivodeship",
+        attributeNodes = @NamedAttributeNode("voivodeship")
+)
 public class City {
 
     @Id
@@ -23,6 +27,6 @@ public class City {
     @NotBlank
     private String name;
 
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Voivodeship voivodeship;
 }

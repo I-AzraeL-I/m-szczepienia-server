@@ -1,6 +1,8 @@
 package com.mycompany.mszczepienia.bean;
 
+import org.hibernate.collection.spi.PersistentCollection;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,7 +13,9 @@ public class BeanConfiguration {
     public ModelMapper modelMapper() {
         var modelMapper = new ModelMapper();
         modelMapper.getConfiguration()
-                .setSkipNullEnabled(true);
+                .setMatchingStrategy(MatchingStrategies.STANDARD)
+                .setSkipNullEnabled(true)
+                .setPropertyCondition(context -> !(context.getSource() instanceof PersistentCollection));
         return modelMapper;
     }
 

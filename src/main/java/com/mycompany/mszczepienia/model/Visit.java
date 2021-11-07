@@ -5,7 +5,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
 @Getter
@@ -22,7 +24,10 @@ public class Visit {
     private Place place;
 
     @Column(nullable = false)
-    private LocalDateTime time;
+    private LocalDate date;
+
+    @Column(nullable = false)
+    private LocalTime time;
 
     @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "vaccine_id")
