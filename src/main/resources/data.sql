@@ -32,7 +32,7 @@ INSERT INTO place (address_id, name, moderator_id) VALUES (1, 'Centralny Szpital
 INSERT INTO place_vaccine (place_id, vaccine_id, quantity) VALUES (1, 1, 100);
 INSERT INTO place_vaccine (place_id, vaccine_id, quantity) VALUES (1, 2, 100);
 INSERT INTO place_vaccine (place_id, vaccine_id, quantity) VALUES (1, 3, 100);
-INSERT INTO place_vaccine (place_id, vaccine_id, quantity) VALUES (1, 4, 100);
+INSERT INTO place_vaccine (place_id, vaccine_id, quantity) VALUES (1, 4, 0);
 INSERT INTO work_day (place_id, day_of_week, opening_hour, closing_hour) VALUES (1, 'MONDAY', '08:00', '16:00');
 INSERT INTO work_day (place_id, day_of_week, opening_hour, closing_hour) VALUES (1, 'TUESDAY', '08:00', '16:00');
 INSERT INTO work_day (place_id, day_of_week, opening_hour, closing_hour) VALUES (1, 'WEDNESDAY', '08:00', '16:00');
