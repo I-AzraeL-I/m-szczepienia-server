@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class DataLoader implements ApplicationRunner {
@@ -30,6 +31,7 @@ public class DataLoader implements ApplicationRunner {
 
 
     @Override
+    @Transactional
     public void run(ApplicationArguments args) throws Exception {
         GenerateData generateData = new GenerateData();
         generateData.generateUsers(userRepository, patientRepository);

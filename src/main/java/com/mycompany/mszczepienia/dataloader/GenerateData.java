@@ -5,8 +5,6 @@ import com.mycompany.mszczepienia.repository.*;
 import com.mycompany.mszczepienia.security.Role;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.springframework.security.core.parameters.P;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -95,7 +93,6 @@ public class GenerateData {
         }
     }
 
-    @Transactional
     public void generatePlace(CityRepository cityRepository, PlaceRepository placeRepository, VaccineRepository vaccineRepository){
         List<City> cities = cityRepository.findAll();
         List<Vaccine> vaccines = vaccineRepository.findAll();
