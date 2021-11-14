@@ -4,13 +4,12 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
 
-import java.io.FileReader;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class Generator {
 
@@ -19,7 +18,7 @@ public class Generator {
     public static JSONArray getUsersArray(String filename) {
         try {
             Resource resource = new ClassPathResource(filename);
-            JSONObject jsonObject = (JSONObject) jsonParser.parse(new FileReader(resource.getFile()));
+            JSONObject jsonObject = (JSONObject) jsonParser.parse(new BufferedReader(new InputStreamReader(resource.getInputStream())));
             return (JSONArray) jsonParser.parse(jsonObject.get("objects").toString());
 
         } catch (IOException | ParseException e) {

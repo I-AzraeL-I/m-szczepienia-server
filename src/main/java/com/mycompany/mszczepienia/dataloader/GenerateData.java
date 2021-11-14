@@ -18,11 +18,11 @@ public class GenerateData {
     private final String addressUserData = "addressUserData.json";
     private final String patientData = "patientData.json";
 
-    public void generateUsers(UserRepository userRepository, PatientRepository patientRepository){
+    public void generateUsers(UserRepository userRepository, PatientRepository patientRepository) {
         JSONArray userData = Generator.getUsersArray(this.userData);
         JSONArray patientData = Generator.getUsersArray(this.patientData);
         JSONArray addressData = Generator.getUsersArray(this.addressUserData);
-        for(int i = 0; i< Objects.requireNonNull(userData).size() - 4; i++){
+        for (int i = 0; i < Objects.requireNonNull(userData).size() - 4; i++) {
             JSONObject userObject = (JSONObject) userData.get(i);
             JSONObject patientObject = (JSONObject) patientData.get(i);
             JSONObject addressObject = (JSONObject) addressData.get(i);
@@ -44,21 +44,21 @@ public class GenerateData {
             patient.setUser(user);
         }
 
-        for(int i=userData.size() - 4; i<userData.size(); i++){
+        for (int i = userData.size() - 4; i < userData.size(); i++) {
             JSONObject jsonObject = (JSONObject) userData.get(i);
             User user = new User();
             user.setEmail(jsonObject.get("email").toString());
             user.setPassword(jsonObject.get("password").toString());
-            if(i % 2 == 0){
-                user.setRole(String.valueOf(Role.MODERATOR));}
-            else {
+            if (i % 2 == 0) {
+                user.setRole(String.valueOf(Role.MODERATOR));
+            } else {
                 user.setRole(String.valueOf(Role.ADMIN));
             }
             userRepository.save(user);
         }
     }
 
-    public void generateCityAndVoivodeship(CityRepository cityRepository, VoivodeshipRepository voivodeshipRepository){
+    public void generateCityAndVoivodeship(CityRepository cityRepository, VoivodeshipRepository voivodeshipRepository) {
         JSONArray jsonArray = Generator.getUsersArray(cityData);
         for (Object o : Objects.requireNonNull(jsonArray)) {
             JSONObject jsonObject = (JSONObject) o;
@@ -73,9 +73,9 @@ public class GenerateData {
     }
 
     public void generateVaccine(VaccineRepository vaccineRepository, ManufacturerRepository manufacturerRepository,
-                                DiseaseRepository diseaseRepository){
+                                DiseaseRepository diseaseRepository) {
         List<String> manufacturers = List.of("Pfizer", "Johnson & Johnson", "Moderna", "AstraZeneca");
-        for(String man: manufacturers){
+        for (String man : manufacturers) {
             Manufacturer manufacturer = new Manufacturer();
             manufacturer.setName(man);
             manufacturerRepository.save(manufacturer);
@@ -85,7 +85,7 @@ public class GenerateData {
         disease.setName("COVID19");
         diseaseRepository.save(disease);
         List<Manufacturer> list = manufacturerRepository.findAll();
-        for(Manufacturer manufacturer: list){
+        for (Manufacturer manufacturer : list) {
             Vaccine vaccine = new Vaccine();
             vaccine.setDisease(disease);
             vaccine.setManufacturer(manufacturer);
@@ -93,7 +93,7 @@ public class GenerateData {
         }
     }
 
-    public void generatePlace(CityRepository cityRepository, PlaceRepository placeRepository, VaccineRepository vaccineRepository){
+    public void generatePlace(CityRepository cityRepository, PlaceRepository placeRepository, VaccineRepository vaccineRepository) {
         List<City> cities = cityRepository.findAll();
         List<Vaccine> vaccines = vaccineRepository.findAll();
         Random random = new Random();
@@ -108,7 +108,7 @@ public class GenerateData {
             Place place = new Place();
             place.setAddress(address);
             place.setName(jsonObject.get("name").toString());
-            for(int i=0; i<random.nextInt(vaccines.size()); i++ ){
+            for (int i = 0; i < random.nextInt(vaccines.size()); i++) {
                 place.addVaccine(vaccines.get(i), random.nextInt(100));
             }
             placeRepository.save(place);
