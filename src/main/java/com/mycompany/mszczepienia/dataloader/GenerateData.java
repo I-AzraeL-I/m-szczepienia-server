@@ -150,19 +150,17 @@ public class GenerateData {
 
     public void generateWorkDays(WorkDayRepository workDayRepository, PlaceRepository placeRepository){
         List<Place> places = placeRepository.findAll();
-        for(int i=0; i<places.size(); i++){
-            for(int j=0; j<7; j++){
+        for (Place place : places) {
+            for (int j = 0; j < 7; j++) {
                 WorkDay workDay = new WorkDay();
                 workDay.setDayOfWeek(DayOfWeek.MONDAY.plus(0));
                 workDay.setOpeningHour(LocalTime.of(8, 0));
                 workDay.setClosingHour(LocalTime.of(17, 0));
-                workDay.setPlace(places.get(i));
+                workDay.setPlace(place);
                 workDayRepository.save(workDay);
+                place.addWorkDay(workDay);
             }
         }
-
-
-
     }
 
 }
