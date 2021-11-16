@@ -6,6 +6,10 @@ import com.mycompany.mszczepienia.security.Role;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.Period;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
@@ -113,6 +117,52 @@ public class GenerateData {
             }
             placeRepository.save(place);
         }
+    }
+
+    public void generateVisit(VisitRepository visitRepository, PlaceRepository placeRepository, VaccineRepository vaccineRepository){
+        Random random = new Random();
+        List<Place> places = placeRepository.findAll();
+        List<Vaccine> vaccines = vaccineRepository.findAll();
+        Visit pendingVisit = new Visit();
+        pendingVisit.setPlace(places.get(random.nextInt(places.size())));
+        pendingVisit.setVisitStatus(VisitStatus.PENDING);
+        pendingVisit.setTime(LocalTime.NOON);
+        pendingVisit.setDate(LocalDate.now().plusDays(3));
+        pendingVisit.setVaccine(vaccines.get(random.nextInt(vaccines.size())));
+        visitRepository.save(pendingVisit);
+
+        Visit canceledVisit = new Visit();
+        canceledVisit.setPlace(places.get(random.nextInt(places.size())));
+        canceledVisit.setVisitStatus(VisitStatus.CANCELLED);
+        canceledVisit.setTime(LocalTime.NOON.plusHours(10));
+        canceledVisit.setDate(LocalDate.now().plusDays(12));
+        canceledVisit.setVaccine(vaccines.get(random.nextInt(vaccines.size())));
+        visitRepository.save(canceledVisit);
+
+        Visit missedVisit = new Visit();
+        missedVisit.setPlace(places.get(random.nextInt(places.size())));
+        missedVisit.setVisitStatus(VisitStatus.MISSED);
+        missedVisit.setTime(LocalTime.NOON.plusHours(12));
+        missedVisit.setDate(LocalDate.now().plusDays(10));
+        missedVisit.setVaccine(vaccines.get(random.nextInt(vaccines.size())));
+        visitRepository.save(missedVisit);
+    }
+
+    public void generateWorkDays(WorkDayRepository workDayRepository, PlaceRepository placeRepository){
+        List<Place> places = placeRepository.findAll();
+        for(int i=0; i<places.size(); i++){
+            for(int j=0; j<7; j++){
+                WorkDay workDay = new WorkDay();
+                workDay.setDayOfWeek(DayOfWeek.MONDAY.plus(0));
+                workDay.setOpeningHour(LocalTime.of(8, 0));
+                workDay.setClosingHour(LocalTime.of(17, 0));
+                workDay.setPlace(places.get(i));
+                workDayRepository.save(workDay);
+            }
+        }
+
+
+
     }
 
 }

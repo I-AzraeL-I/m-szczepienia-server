@@ -19,6 +19,8 @@ public class DataLoader implements ApplicationRunner {
     private final ManufacturerRepository manufacturerRepository;
     private final PlaceRepository placeRepository;
     private final DiseaseRepository diseaseRepository;
+    private final WorkDayRepository workDayRepository;
+    private final VisitRepository visitRepository;
 
     @Override
     @Transactional
@@ -28,5 +30,7 @@ public class DataLoader implements ApplicationRunner {
         generateData.generateCityAndVoivodeship(cityRepository, voivodeshipRepository);
         generateData.generateVaccine(vaccineRepository, manufacturerRepository, diseaseRepository);
         generateData.generatePlace(cityRepository, placeRepository, vaccineRepository);
+        generateData.generateVisit(visitRepository, placeRepository, vaccineRepository);
+        generateData.generateWorkDays(workDayRepository, placeRepository);
     }
 }
