@@ -1,13 +1,19 @@
 package com.mycompany.mszczepienia.service;
 
+import com.mycompany.mszczepienia.dto.visit.CreateVisitDto;
 import com.mycompany.mszczepienia.dto.visit.FreeVisitsDto;
+import com.mycompany.mszczepienia.dto.visit.VisitDto;
+import com.mycompany.mszczepienia.exception.InvalidVisitException;
+import com.mycompany.mszczepienia.exception.UserNotFoundException;
+import com.mycompany.mszczepienia.exception.VaccineOutOfStockException;
+import com.mycompany.mszczepienia.model.User;
 import com.mycompany.mszczepienia.model.Visit;
 import com.mycompany.mszczepienia.model.VisitStatus;
-import com.mycompany.mszczepienia.repository.PlaceVaccineRepository;
-import com.mycompany.mszczepienia.repository.VisitRepository;
-import com.mycompany.mszczepienia.repository.WorkDayRepository;
+import com.mycompany.mszczepienia.repository.*;
 import com.mycompany.mszczepienia.util.RangeParser;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,6 +35,10 @@ public class VisitService {
     private final VisitRepository visitRepository;
     private final WorkDayRepository workDayRepository;
     private final PlaceVaccineRepository placeVaccineRepository;
+    private final PlaceRepository placeRepository;
+    private final VaccineRepository vaccineRepository;
+    private final PatientRepository patientRepository;
+    private final ModelMapper modelMapper;
 
     @Transactional(readOnly = true)
     public FreeVisitsDto findFreeVisits(LocalDate date, Long placeId, Long vaccineId) {
@@ -60,7 +70,39 @@ public class VisitService {
         return new FreeVisitsDto(date, freeVisits);
     }
 
+    @Transactional
+    public VisitDto createVisit(CreateVisitDto visitDto) {
+        if (!isVisitInFuture(visitDto) || isVisitAlreadyTaken(visitDto)) {
+            throw new InvalidVisitException(LocalDateTime.of(visitDto.getDate(), visitDto.getTime()).toString(), "Visit request is invalid");
+        }
+
+        String email = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        var patient = patientRepository.findByIdAndUser_Email(visitDto.getPatientId(), email)
+                .orElseThrow(() -> new UserNotFoundException(visitDto.getPatientId().toString(), "Patient not found"));
+        if (placeVaccineRepository.decrementQuantity(visitDto.getPlaceId(), visitDto.getVaccineId()) != 1) {
+            throw new VaccineOutOfStockException(visitDto.getVaccineId().toString(), "Vaccine is out of stock");
+        }
+
+        var visit = new Visit();
+        visit.setVisitStatus(VisitStatus.PENDING);
+        visit.setDate(visitDto.getDate());
+        visit.setTime(visitDto.getTime());
+        visit.setPlace(placeRepository.getById(visitDto.getPlaceId()));
+        visit.setVaccine(vaccineRepository.getById(visitDto.getVaccineId()));
+
+        patient.addVisit(visit);
+        return modelMapper.map(visit, VisitDto.class);
+    }
+
     private boolean isVaccineInStock(Long placeId, Long vaccineId) {
         return placeVaccineRepository.existsByPlace_IdAndVaccine_IdAndQuantityIsGreaterThan(placeId, vaccineId, 0);
+    }
+
+    private boolean isVisitAlreadyTaken(CreateVisitDto createVisitDto) {
+        return visitRepository.existsByDateAndTimeAndVisitStatus(createVisitDto.getDate(), createVisitDto.getTime(), VisitStatus.PENDING);
+    }
+
+    private boolean isVisitInFuture(CreateVisitDto createVisitDto) {
+        return LocalDateTime.of(createVisitDto.getDate(), createVisitDto.getTime()).isAfter(LocalDateTime.now(ZoneId.of(USED_TIMEZONE)));
     }
 }
