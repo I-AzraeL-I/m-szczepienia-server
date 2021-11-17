@@ -6,12 +6,26 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Entity
 @Getter
 @Setter
+@NamedEntityGraph(
+        name = "Visit.vaccine.(disease+manufacturer)+place",
+        attributeNodes = {
+                @NamedAttributeNode("place"),
+                @NamedAttributeNode(value = "vaccine", subgraph = "vaccineDetails")
+        },
+        subgraphs = {
+                @NamedSubgraph(
+                        name = "vaccineDetails",
+                        attributeNodes = {
+                                @NamedAttributeNode("manufacturer"),
+                                @NamedAttributeNode("disease")
+                })
+        }
+)
 public class Visit {
 
     @Id
@@ -19,9 +33,14 @@ public class Visit {
     @Setter(AccessLevel.NONE)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "place_id")
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Place place;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    private Vaccine vaccine;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    private Patient patient;
 
     @Column(nullable = false)
     private LocalDate date;
@@ -29,11 +48,19 @@ public class Visit {
     @Column(nullable = false)
     private LocalTime time;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "vaccine_id")
-    private Vaccine vaccine;
-
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private VisitStatus visitStatus;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Visit)) return false;
+        return id != null && id.equals(((Visit) o).getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 }

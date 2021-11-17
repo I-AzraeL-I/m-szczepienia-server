@@ -7,6 +7,8 @@ import org.hibernate.validator.constraints.pl.PESEL;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -37,8 +39,16 @@ public class Patient {
     @JoinColumn(name = "address_id")
     private Address address;
 
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<Visit> visits = new ArrayList<>();
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private User user;
+
+    public void addVisit(Visit visit) {
+        visits.add(visit);
+        visit.setPatient(this);
+    }
 
     @Override
     public boolean equals(Object o) {

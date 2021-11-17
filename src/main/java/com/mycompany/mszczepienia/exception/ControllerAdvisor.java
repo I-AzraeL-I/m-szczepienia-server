@@ -18,21 +18,23 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler({TokenRefreshException.class})
+    @ExceptionHandler(TokenRefreshException.class)
     public ResponseEntity<String> handleAuthenticationException(TokenRefreshException e) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
     }
 
     @ExceptionHandler({
             UserAlreadyExistsException.class,
-            PeselAlreadyExistsException.class
+            PeselAlreadyExistsException.class,
+            InvalidVisitException.class,
+            VaccineOutOfStockException.class
     })
-    public ResponseEntity<String> handleRegisterConflict(RuntimeException e) {
+    public ResponseEntity<String> handleConflict(RuntimeException e) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
     }
 
     @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<String> handleUserNotFound(UserNotFoundException e) {
+    public ResponseEntity<String> handleNotFound(RuntimeException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
 

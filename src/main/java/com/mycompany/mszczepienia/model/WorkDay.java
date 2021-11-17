@@ -34,8 +34,8 @@ public class WorkDay {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Vaccine)) return false;
-        return id != null && id.equals(((Vaccine) o).getId());
+        if (!(o instanceof WorkDay)) return false;
+        return id != null && id.equals(((WorkDay) o).getId());
     }
 
     @Override
