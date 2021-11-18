@@ -64,7 +64,7 @@ public class VisitService {
         var startHour = LocalTime.from(workDay.getOpeningHour());
         var endHour = LocalTime.from(workDay.getClosingHour());
         if (timeNow.isAfter(LocalDateTime.of(date, startHour))) {
-            startHour = timeNow.toLocalTime();
+            endHour = getNextValidHour(endHour);
         }
 
         var parser = new RangeParser(startHour, endHour);
@@ -117,5 +117,10 @@ public class VisitService {
 
     private boolean isVisitInFuture(CreateVisitDto createVisitDto) {
         return LocalDateTime.of(createVisitDto.getDate(), createVisitDto.getTime()).isAfter(LocalDateTime.now(ZoneId.of(usedTimezone)));
+    }
+
+    private LocalTime getNextValidHour(LocalTime time) {
+        int minutes = (int) (Math.ceil((float) time.getMinute() / visitLengthMin) * visitLengthMin);
+        return time.truncatedTo(ChronoUnit.MINUTES).withMinute(minutes);
     }
 }
