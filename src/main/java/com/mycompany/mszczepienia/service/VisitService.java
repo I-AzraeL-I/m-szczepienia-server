@@ -100,7 +100,11 @@ public class VisitService {
 
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public void updateMissedVisitsStatus() {
-        List<Visit> visits = visitRepository.findAllByDateBeforeAndVisitStatusEquals(LocalDate.now(ZoneId.of(usedTimezone)), VisitStatus.PENDING);
+        LocalDateTime dateTimeNow = LocalDateTime.now(ZoneId.of(usedTimezone));
+        List<Visit> visits = visitRepository.findAllByDateBeforeAndTimeBeforeAndVisitStatusEquals(
+                dateTimeNow.toLocalDate(),
+                dateTimeNow.toLocalTime(),
+                VisitStatus.PENDING);
         visits.forEach(visit -> {
             visit.setVisitStatus(VisitStatus.MISSED);
             placeVaccineRepository.incrementQuantity(visit.getPlace().getId(), visit.getVaccine().getId());

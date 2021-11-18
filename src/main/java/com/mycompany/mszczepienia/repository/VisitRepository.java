@@ -18,5 +18,5 @@ public interface VisitRepository extends JpaRepository<Visit, Long> {
     boolean existsByDateAndTimeAndVisitStatus(LocalDate date, LocalTime time, VisitStatus visitStatus);
 
     @EntityGraph("visit.vaccine+place")
-    List<Visit> findAllByDateBeforeAndVisitStatusEquals(LocalDate date, VisitStatus visitStatus);
+    List<Visit> findAllByDateBeforeAndTimeBeforeAndVisitStatusEquals(LocalDate date, LocalTime time, VisitStatus visitStatus);
 }
