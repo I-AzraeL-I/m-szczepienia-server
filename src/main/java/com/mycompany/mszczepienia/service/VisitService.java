@@ -6,13 +6,13 @@ import com.mycompany.mszczepienia.dto.visit.VisitDto;
 import com.mycompany.mszczepienia.exception.InvalidVisitException;
 import com.mycompany.mszczepienia.exception.UserNotFoundException;
 import com.mycompany.mszczepienia.exception.VaccineOutOfStockException;
-import com.mycompany.mszczepienia.model.User;
 import com.mycompany.mszczepienia.model.Visit;
 import com.mycompany.mszczepienia.model.VisitStatus;
 import com.mycompany.mszczepienia.repository.*;
 import com.mycompany.mszczepienia.util.RangeParser;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,8 +29,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class VisitService {
 
-    public static final int VISIT_LENGTH_MIN = 5;
-    public static final String USED_TIMEZONE = "Europe/Warsaw";
+    @Value("${app.visitLengthMin}")
+    private int visitLengthMin;
+
+    @Value("${app.usedTimezone}")
+    private String usedTimezone;
 
     private final VisitRepository visitRepository;
     private final WorkDayRepository workDayRepository;
@@ -48,7 +51,7 @@ public class VisitService {
         }
         final var workDay = workDayOptional.get();
 
-        var timeNow = LocalDateTime.now(ZoneId.of(USED_TIMEZONE));
+        var timeNow = LocalDateTime.now(ZoneId.of(usedTimezone));
         boolean isVaccineInStock = isVaccineInStock(placeId, vaccineId);
         boolean isGivenDateInPast = timeNow.isAfter(LocalDateTime.of(date, workDay.getClosingHour()));
         if (!isVaccineInStock || isGivenDateInPast) {
@@ -64,9 +67,9 @@ public class VisitService {
         }
 
         var parser = new RangeParser(startHour, endHour);
-        visits.forEach(visit -> parser.subtractRange(visit.getTime(), visit.getTime().plusMinutes(VISIT_LENGTH_MIN)));
+        visits.forEach(visit -> parser.subtractRange(visit.getTime(), visit.getTime().plusMinutes(visitLengthMin)));
 
-        List<LocalTime> freeVisits = parser.parseToStartTimeList(VISIT_LENGTH_MIN, ChronoUnit.MINUTES);
+        List<LocalTime> freeVisits = parser.parseToStartTimeList(visitLengthMin, ChronoUnit.MINUTES);
         return new FreeVisitsDto(date, freeVisits);
     }
 
@@ -103,6 +106,6 @@ public class VisitService {
     }
 
     private boolean isVisitInFuture(CreateVisitDto createVisitDto) {
-        return LocalDateTime.of(createVisitDto.getDate(), createVisitDto.getTime()).isAfter(LocalDateTime.now(ZoneId.of(USED_TIMEZONE)));
+        return LocalDateTime.of(createVisitDto.getDate(), createVisitDto.getTime()).isAfter(LocalDateTime.now(ZoneId.of(usedTimezone)));
     }
 }

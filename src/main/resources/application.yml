@@ -16,3 +16,5 @@ app:
   jwtSecret: ${JWT_SECRET}
   jwtExpirationMs: ${JWT_EXPIRATION_MS}
   jwtRefreshExpirationMs: ${JWT_REFRESH_EXPIRATION_MS}
+  usedTimezone: ${USED_TIMEZONE}
+  visitLengthMin: ${VISIT_LENGTH_MIN}
