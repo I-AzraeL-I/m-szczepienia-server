@@ -15,6 +15,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
@@ -95,6 +96,15 @@ public class VisitService {
 
         patient.addVisit(visit);
         return modelMapper.map(visit, VisitDto.class);
+    }
+
+    @Transactional(isolation = Isolation.SERIALIZABLE)
+    public void updateMissedVisitsStatus() {
+        List<Visit> visits = visitRepository.findAllByDateBeforeAndVisitStatusEquals(LocalDate.now(ZoneId.of(usedTimezone)), VisitStatus.PENDING);
+        visits.forEach(visit -> {
+            visit.setVisitStatus(VisitStatus.MISSED);
+            placeVaccineRepository.incrementQuantity(visit.getPlace().getId(), visit.getVaccine().getId());
+        });
     }
 
     private boolean isVaccineInStock(Long placeId, Long vaccineId) {

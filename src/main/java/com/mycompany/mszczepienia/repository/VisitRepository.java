@@ -2,6 +2,7 @@ package com.mycompany.mszczepienia.repository;
 
 import com.mycompany.mszczepienia.model.Visit;
 import com.mycompany.mszczepienia.model.VisitStatus;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -15,4 +16,7 @@ public interface VisitRepository extends JpaRepository<Visit, Long> {
     List<Visit> findAllByPlace_IdAndDateAndTimeAfterAndVisitStatusEquals(Long placeId, LocalDate date, LocalTime time, VisitStatus visitStatus);
 
     boolean existsByDateAndTimeAndVisitStatus(LocalDate date, LocalTime time, VisitStatus visitStatus);
+
+    @EntityGraph("visit.vaccine+place")
+    List<Visit> findAllByDateBeforeAndVisitStatusEquals(LocalDate date, VisitStatus visitStatus);
 }

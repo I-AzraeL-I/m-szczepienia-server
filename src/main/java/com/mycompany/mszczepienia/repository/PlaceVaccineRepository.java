@@ -13,7 +13,7 @@ public interface PlaceVaccineRepository extends JpaRepository<PlaceVaccine, Long
 
     @Modifying
     @Query("UPDATE PlaceVaccine pv SET pv.quantity = pv.quantity + 1 WHERE pv.id.placeId = :placeId AND pv.id.vaccineId = :vaccineId")
-    int incrementQuantity(Long placeId, Long vaccineId);
+    void incrementQuantity(Long placeId, Long vaccineId);
 
     @Modifying
     @Query("UPDATE PlaceVaccine pv SET pv.quantity = pv.quantity - 1 WHERE pv.id.placeId = :placeId AND pv.id.vaccineId = :vaccineId AND pv.quantity > 0")

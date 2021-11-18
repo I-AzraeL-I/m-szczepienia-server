@@ -1,4 +1,4 @@
-package com.mycompany.mszczepienia.bean;
+package com.mycompany.mszczepienia.configuration;
 
 import org.hibernate.collection.spi.PersistentCollection;
 import org.modelmapper.ModelMapper;
@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class BeanConfiguration {
+public class PluginConfiguration {
 
     @Bean
     public ModelMapper modelMapper() {

@@ -11,21 +11,30 @@ import java.time.LocalTime;
 @Entity
 @Getter
 @Setter
-@NamedEntityGraph(
-        name = "Visit.vaccine.(disease+manufacturer)+place",
-        attributeNodes = {
-                @NamedAttributeNode("place"),
-                @NamedAttributeNode(value = "vaccine", subgraph = "vaccineDetails")
-        },
-        subgraphs = {
-                @NamedSubgraph(
-                        name = "vaccineDetails",
-                        attributeNodes = {
-                                @NamedAttributeNode("manufacturer"),
-                                @NamedAttributeNode("disease")
-                })
-        }
-)
+@NamedEntityGraphs({
+        @NamedEntityGraph(
+                name = "visit.vaccine.(disease+manufacturer)+place",
+                attributeNodes = {
+                        @NamedAttributeNode("place"),
+                        @NamedAttributeNode(value = "vaccine", subgraph = "vaccineDetails")
+                },
+                subgraphs = {
+                        @NamedSubgraph(
+                                name = "vaccineDetails",
+                                attributeNodes = {
+                                        @NamedAttributeNode("manufacturer"),
+                                        @NamedAttributeNode("disease")
+                                })
+                }
+        ),
+        @NamedEntityGraph(
+                name = "visit.vaccine+place",
+                attributeNodes = {
+                        @NamedAttributeNode("place"),
+                        @NamedAttributeNode("vaccine")
+                }
+        )
+})
 public class Visit {
 
     @Id

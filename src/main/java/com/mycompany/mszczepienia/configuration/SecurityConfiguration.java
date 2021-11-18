@@ -1,5 +1,8 @@
-package com.mycompany.mszczepienia.security;
+package com.mycompany.mszczepienia.configuration;
 
+import com.mycompany.mszczepienia.security.AuthEntryPoint;
+import com.mycompany.mszczepienia.security.AuthTokenFilter;
+import com.mycompany.mszczepienia.security.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
