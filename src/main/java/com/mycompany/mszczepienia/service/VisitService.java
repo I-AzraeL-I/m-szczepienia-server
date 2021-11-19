@@ -101,7 +101,8 @@ public class VisitService {
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public void updateMissedVisitsStatus() {
         LocalDateTime dateTimeNow = LocalDateTime.now(ZoneId.of(usedTimezone));
-        List<Visit> visits = visitRepository.findAllByDateBeforeAndTimeBeforeAndVisitStatusEquals(
+        List<Visit> visits = visitRepository.findAllByDateBeforeOrDateEqualsAndTimeBeforeAndVisitStatusEquals(
+                dateTimeNow.toLocalDate(),
                 dateTimeNow.toLocalDate(),
                 dateTimeNow.toLocalTime(),
                 VisitStatus.PENDING);
