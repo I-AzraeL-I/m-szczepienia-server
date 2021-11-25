@@ -1,10 +1,7 @@
 package com.mycompany.mszczepienia.service;
 
 import com.mycompany.mszczepienia.dto.auth.*;
-import com.mycompany.mszczepienia.exception.PeselAlreadyExistsException;
-import com.mycompany.mszczepienia.exception.TokenRefreshException;
-import com.mycompany.mszczepienia.exception.UserAlreadyExistsException;
-import com.mycompany.mszczepienia.exception.UserNotFoundException;
+import com.mycompany.mszczepienia.exception.*;
 import com.mycompany.mszczepienia.model.Patient;
 import com.mycompany.mszczepienia.model.User;
 import com.mycompany.mszczepienia.repository.PatientRepository;
@@ -104,5 +101,15 @@ public class AuthService {
                 .accessToken(jwt)
                 .refreshToken(refreshToken)
                 .build();
+    }
+
+    public void forgotPassword(ForgotPasswordDto forgotPasswordDto){
+        if(! forgotPasswordDto.getPassword().equals(forgotPasswordDto.getConfirmPassword())){
+                throw new ForgotPasswordException();
+        }
+        var userDto = findUserByEmail(forgotPasswordDto.getEmail());
+        var user1 = modelMapper.map(userDto, User.class);
+        user1.setPassword(forgotPasswordDto.getPassword());
+        userRepository.save(user1);
     }
 }
