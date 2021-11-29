@@ -112,6 +112,14 @@ public class VisitService {
         });
     }
 
+    @Transactional
+    public VisitDto cancelVisit(Long visitId){
+        Visit visit = visitRepository.getById(visitId);
+        visit.setVisitStatus(VisitStatus.CANCELLED);
+        visitRepository.saveAndFlush(visit);
+        return modelMapper.map(visit, VisitDto.class);
+    }
+
     private boolean isVaccineInStock(Long placeId, Long vaccineId) {
         return placeVaccineRepository.existsByPlace_IdAndVaccine_IdAndQuantityIsGreaterThan(placeId, vaccineId, 0);
     }

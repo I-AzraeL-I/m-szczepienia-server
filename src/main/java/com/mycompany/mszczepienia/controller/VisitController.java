@@ -30,4 +30,9 @@ public class VisitController {
     public ResponseEntity<VisitDto> createVisit(@Valid @RequestBody CreateVisitDto createVisitDto) {
         return ResponseEntity.ok(visitService.createVisit(createVisitDto));
     }
+
+    @PutMapping("/cancel")
+    public ResponseEntity<VisitDto> cancelVisit(@Valid @RequestBody Long visiId){
+        return ResponseEntity.ok(visitService.cancelVisit(visiId));
+    }
 }
