@@ -107,9 +107,9 @@ public class AuthService {
         if(! forgotPasswordDto.getPassword().equals(forgotPasswordDto.getConfirmPassword())){
                 throw new ForgotPasswordException();
         }
-        var userDto = findUserByEmail(forgotPasswordDto.getEmail());
-        var user1 = modelMapper.map(userDto, User.class);
-        user1.setPassword(forgotPasswordDto.getPassword());
-        userRepository.save(user1);
+        User user = userRepository.findByEmail(forgotPasswordDto.getEmail()).orElseThrow(() ->
+                    new UserNotFoundException("Reset password", "There is no user with this email"));
+        user.setPassword(forgotPasswordDto.getPassword());
+        userRepository.save(user);
     }
 }

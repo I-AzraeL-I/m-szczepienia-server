@@ -32,7 +32,7 @@ public class VisitController {
     }
 
     @PutMapping("/cancel")
-    public ResponseEntity<VisitDto> cancelVisit(@Valid @RequestBody Long visiId){
+    public ResponseEntity<VisitDto> cancelVisit(@Valid @RequestParam Long visiId){
         return ResponseEntity.ok(visitService.cancelVisit(visiId));
     }
 }
