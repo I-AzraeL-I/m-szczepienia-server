@@ -13,6 +13,7 @@ import com.mycompany.mszczepienia.util.RangeParser;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -120,6 +121,10 @@ public class VisitService {
         return modelMapper.map(visit, VisitDto.class);
     }
 
+    public List<Visit> getHistoryOfVisit(Long patientId){
+        return visitRepository.findAllByPatient_Id(patientId);
+    }
+
     private boolean isVaccineInStock(Long placeId, Long vaccineId) {
         return placeVaccineRepository.existsByPlace_IdAndVaccine_IdAndQuantityIsGreaterThan(placeId, vaccineId, 0);
     }
@@ -131,7 +136,6 @@ public class VisitService {
     private boolean isVisitInFuture(CreateVisitDto createVisitDto) {
         return LocalDateTime.of(createVisitDto.getDate(), createVisitDto.getTime()).isAfter(LocalDateTime.now(ZoneId.of(usedTimezone)));
     }
-
     private LocalTime adjustStartHour(LocalTime time) {
         int minutes = (int) (Math.ceil((float) time.getMinute() / visitLengthMin) * visitLengthMin);
         return time.truncatedTo(ChronoUnit.MINUTES).withMinute(minutes);
