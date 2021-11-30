@@ -1,13 +1,12 @@
 package com.mycompany.mszczepienia.security;
 
-import lombok.RequiredArgsConstructor;
-
-@RequiredArgsConstructor
 public enum Role {
 
-    USER("ROLE_USER"),
-    MODERATOR("ROLE_MODERATOR"),
-    ADMIN("ROLE_ADMIN");
+    USER,
+    MODERATOR,
+    ADMIN;
 
-    public final String value;
+    public String withPrefix() {
+        return "ROLE" + name();
+    }
 }

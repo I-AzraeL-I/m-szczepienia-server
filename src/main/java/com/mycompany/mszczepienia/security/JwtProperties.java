@@ -1,11 +1,7 @@
 package com.mycompany.mszczepienia.security;
 
-import lombok.RequiredArgsConstructor;
+public class JwtProperties {
 
-@RequiredArgsConstructor
-public enum JwtProperties {
-
-    TOKEN_CLAIM_AUTHORITIES("TOKEN_CLAIM_AUTHORITIES");
-
-    public final String value;
+    public static final String TOKEN_CLAIM_AUTHORITIES = "TOKEN_CLAIM_AUTHORITIES";
+    public static final String TOKEN_CLAIM_USER_ID = "TOKEN_CLAIM_USER_ID";
 }

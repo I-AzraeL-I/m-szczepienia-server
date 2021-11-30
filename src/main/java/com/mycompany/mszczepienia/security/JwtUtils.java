@@ -46,11 +46,15 @@ public class JwtUtils {
 
     public List<GrantedAuthority> getAuthoritiesFromJwt(String token) {
         @SuppressWarnings("unchecked")
-        var authorities = (List<String>) getAllClaimsFromJwt(token).get(JwtProperties.TOKEN_CLAIM_AUTHORITIES.value);
+        var authorities = (List<String>) getAllClaimsFromJwt(token).get(JwtProperties.TOKEN_CLAIM_AUTHORITIES);
 
         return authorities.stream()
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toUnmodifiableList());
+    }
+
+    public Long getIdFromJwt(String token) {
+        return (Long) getAllClaimsFromJwt(token).get(JwtProperties.TOKEN_CLAIM_USER_ID);
     }
 
     public boolean isJwtValid(String authToken) {
@@ -75,7 +79,8 @@ public class JwtUtils {
     private String generateTokenWithExpiration(UserDto userDto, int tokenExpirationMs) {
         return Jwts.builder()
                 .setSubject(userDto.getEmail())
-                .claim(JwtProperties.TOKEN_CLAIM_AUTHORITIES.value, List.of(userDto.getRole()))
+                .claim(JwtProperties.TOKEN_CLAIM_AUTHORITIES, List.of(userDto.getRole()))
+                .claim(JwtProperties.TOKEN_CLAIM_USER_ID, userDto.getId())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + tokenExpirationMs))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)

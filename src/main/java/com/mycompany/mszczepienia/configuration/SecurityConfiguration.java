@@ -75,9 +75,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public RoleHierarchy roleHierarchy() {
         var hierarchy = new RoleHierarchyImpl();
         hierarchy.setHierarchy(String.format("%1$s > %2$s\n%1$s > %3$s\n%3$s > %2$s",
-                Role.ADMIN.value,
-                Role.USER.value,
-                Role.MODERATOR.value));
+                Role.ADMIN.withPrefix(),
+                Role.USER.withPrefix(),
+                Role.MODERATOR.withPrefix()));
         return hierarchy;
     }
 

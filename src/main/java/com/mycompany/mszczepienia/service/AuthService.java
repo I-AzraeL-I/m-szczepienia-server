@@ -75,7 +75,7 @@ public class AuthService {
     @Transactional
     public void register(RegisterRequestDto registerRequestDto) {
         var user = modelMapper.map(registerRequestDto, User.class);
-        user.setRole(Role.USER.value);
+        user.setRole(Role.USER.withPrefix());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         var patient = modelMapper.map(registerRequestDto, Patient.class);
         patient.setMainProfile(true);
