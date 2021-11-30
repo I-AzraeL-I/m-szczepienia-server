@@ -7,6 +7,6 @@ public enum Role {
     ADMIN;
 
     public String withPrefix() {
-        return "ROLE" + name();
+        return "ROLE_" + name();
     }
 }
