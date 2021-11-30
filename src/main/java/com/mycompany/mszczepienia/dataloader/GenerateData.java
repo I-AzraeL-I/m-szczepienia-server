@@ -49,7 +49,7 @@ public class GenerateData {
             User user = new User();
             user.setEmail(userObject.get("email").toString());
             user.setPassword(passwordEncoder.encode(userObject.get("password").toString()));
-            user.setRole(Role.USER.value);
+            user.setRole(Role.USER.withPrefix());
             userRepository.save(user);
             System.out.println("Elo");
             Patient patient = new Patient();
@@ -70,9 +70,9 @@ public class GenerateData {
             user.setEmail(jsonObject.get("email").toString());
             user.setPassword(jsonObject.get("password").toString());
             if (i % 2 == 0) {
-                user.setRole(Role.MODERATOR.value);
+                user.setRole(Role.MODERATOR.withPrefix());
             } else {
-                user.setRole(Role.ADMIN.value);
+                user.setRole(Role.ADMIN.withPrefix());
             }
             userRepository.save(user);
         }
