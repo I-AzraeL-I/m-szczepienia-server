@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: ${SPRING_DATASOURCE_URL}
-    username: ${SPRING_DATASOURCE_USERNAME}
-    password: ${SPRING_DATASOURCE_PASSWORD}
+    url: ${JDBC_DATABASE_URLL}
+    username: ${JDBC_DATABASE_USERNAME}
+    password: ${JDBC_DATABASE_PASSWOR}
   jpa:
     database-platform: ${SPRING_JPA_DATABASE-PLATFORM}
     defer-datasource-initialization: ${SPRING_JPA_DATABASE-DEFER-DATASOURCE-INITIALIZATION}
