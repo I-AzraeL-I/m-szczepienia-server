@@ -1,5 +1,6 @@
 package com.mycompany.mszczepienia.exception;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +17,12 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @ControllerAdvice
+@Slf4j
 public class ControllerAdvisor extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(TokenRefreshException.class)
     public ResponseEntity<String> handleAuthenticationException(TokenRefreshException e) {
+        log.error("{}", e.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
     }
 
@@ -30,11 +33,13 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
             VaccineOutOfStockException.class
     })
     public ResponseEntity<String> handleConflict(RuntimeException e) {
+        log.error("{}", e.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
     }
 
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<String> handleNotFound(RuntimeException e) {
+        log.error("{}", e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
 
@@ -44,6 +49,7 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
                                                                   @NonNull HttpHeaders headers,
                                                                   @NonNull HttpStatus status,
                                                                   @NonNull WebRequest request) {
+        log.error("{}", ex.getMessage());
         Map<String, String> errors = ex.getBindingResult().getFieldErrors().stream()
                 .collect(Collectors.toUnmodifiableMap(
                         FieldError::getField,
