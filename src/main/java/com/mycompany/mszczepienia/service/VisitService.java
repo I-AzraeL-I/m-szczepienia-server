@@ -115,7 +115,9 @@ public class VisitService {
 
     @Transactional
     public VisitDto cancelVisit(Long visitId){
+        System.out.println(visitId);
         Visit visit = visitRepository.getById(visitId);
+        System.out.println(visit);
         visit.setVisitStatus(VisitStatus.CANCELLED);
         visitRepository.saveAndFlush(visit);
         return modelMapper.map(visit, VisitDto.class);

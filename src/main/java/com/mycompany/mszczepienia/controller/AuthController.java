@@ -4,10 +4,7 @@ import com.mycompany.mszczepienia.dto.auth.*;
 import com.mycompany.mszczepienia.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -32,5 +29,10 @@ public class AuthController {
     @PostMapping("/refresh")
     public ResponseEntity<RefreshJwtResponseDto> refreshToken(@Valid @RequestBody RefreshJwtRequestDto refreshJwtRequestDto) {
         return ResponseEntity.ok(authService.refreshToken(refreshJwtRequestDto));
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<UpdatePasswordDto> updatePassword(@RequestBody UpdatePasswordDto updatePasswordDto){
+        return ResponseEntity.ok(authService.updatePassword(updatePasswordDto));
     }
 }

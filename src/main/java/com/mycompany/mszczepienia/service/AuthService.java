@@ -102,14 +102,12 @@ public class AuthService {
                 .refreshToken(refreshToken)
                 .build();
     }
-
-    public void forgotPassword(ForgotPasswordDto forgotPasswordDto){
-        if(! forgotPasswordDto.getPassword().equals(forgotPasswordDto.getConfirmPassword())){
-                throw new ForgotPasswordException();
-        }
+    @Transactional
+    public UpdatePasswordDto updatePassword(UpdatePasswordDto forgotPasswordDto){
         User user = userRepository.findByEmail(forgotPasswordDto.getEmail()).orElseThrow(() ->
                     new UserNotFoundException("Reset password", "There is no user with this email"));
-        user.setPassword(forgotPasswordDto.getPassword());
+        user.setPassword(passwordEncoder.encode(forgotPasswordDto.getPassword()));
         userRepository.save(user);
+        return modelMapper.map(user, UpdatePasswordDto.class);
     }
 }
