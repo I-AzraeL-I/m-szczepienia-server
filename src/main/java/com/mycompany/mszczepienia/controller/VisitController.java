@@ -1,5 +1,6 @@
 package com.mycompany.mszczepienia.controller;
 
+import com.mycompany.mszczepienia.dto.place.PlaceDto;
 import com.mycompany.mszczepienia.dto.visit.CreateVisitDto;
 import com.mycompany.mszczepienia.dto.visit.FreeVisitsDto;
 import com.mycompany.mszczepienia.dto.visit.VisitDto;
@@ -35,13 +36,11 @@ public class VisitController {
 
     @PutMapping("/cancel")
     public ResponseEntity<VisitDto> cancelVisit(@Valid @RequestParam Long visitId){
-        System.out.println("elo");
         return ResponseEntity.ok(visitService.cancelVisit(visitId));
     }
 
     @GetMapping("/history")
-    public ResponseEntity<List<Visit>> getHistoryOfVisit(@Valid @RequestParam Long patientId){
-        return ResponseEntity.ok(visitService.getHistoryOfVisit(patientId));
-
+    public ResponseEntity<List<VisitDto>> getVisitByPatientId(@RequestParam Long patientId) {
+        return ResponseEntity.ok(visitService.findByPatientId(patientId));
     }
 }

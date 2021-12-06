@@ -1,5 +1,6 @@
 package com.mycompany.mszczepienia.service;
 
+import com.mycompany.mszczepienia.dto.place.PlaceDto;
 import com.mycompany.mszczepienia.dto.visit.CreateVisitDto;
 import com.mycompany.mszczepienia.dto.visit.FreeVisitsDto;
 import com.mycompany.mszczepienia.dto.visit.VisitDto;
@@ -12,6 +13,7 @@ import com.mycompany.mszczepienia.repository.*;
 import com.mycompany.mszczepienia.util.RangeParser;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -123,8 +125,9 @@ public class VisitService {
         return modelMapper.map(visit, VisitDto.class);
     }
 
-    public List<Visit> getHistoryOfVisit(Long patientId){
-        return visitRepository.findAllByPatient_Id(patientId);
+    public List<VisitDto> findByPatientId(Long patientId){
+        var visitDtoList = new TypeToken<List<VisitDto>>() {}.getType();
+        return modelMapper.map(visitRepository.findAllByPatient_Id(patientId), visitDtoList);
     }
 
     private boolean isVaccineInStock(Long placeId, Long vaccineId) {
