@@ -103,11 +103,10 @@ public class AuthService {
                 .build();
     }
     @Transactional
-    public UpdatePasswordDto updatePassword(UpdatePasswordDto forgotPasswordDto){
+    public void updatePassword(UpdatePasswordDto forgotPasswordDto){
         User user = userRepository.findByEmail(forgotPasswordDto.getEmail()).orElseThrow(() ->
                     new UserNotFoundException("Reset password", "There is no user with this email"));
         user.setPassword(passwordEncoder.encode(forgotPasswordDto.getPassword()));
         userRepository.save(user);
-        return modelMapper.map(user, UpdatePasswordDto.class);
     }
 }

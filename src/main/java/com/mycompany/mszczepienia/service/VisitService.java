@@ -1,12 +1,10 @@
 package com.mycompany.mszczepienia.service;
 
-import com.mycompany.mszczepienia.dto.place.PlaceDto;
 import com.mycompany.mszczepienia.dto.visit.CreateVisitDto;
 import com.mycompany.mszczepienia.dto.visit.FreeVisitsDto;
 import com.mycompany.mszczepienia.dto.visit.VisitDto;
-import com.mycompany.mszczepienia.exception.InvalidVisitException;
-import com.mycompany.mszczepienia.exception.UserNotFoundException;
-import com.mycompany.mszczepienia.exception.VaccineOutOfStockException;
+import com.mycompany.mszczepienia.exception.*;
+import com.mycompany.mszczepienia.model.User;
 import com.mycompany.mszczepienia.model.Visit;
 import com.mycompany.mszczepienia.model.VisitStatus;
 import com.mycompany.mszczepienia.repository.*;
@@ -15,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -116,15 +113,26 @@ public class VisitService {
     }
 
     @Transactional
-    public VisitDto cancelVisit(Long visitId){
-        System.out.println(visitId);
-        Visit visit = visitRepository.getById(visitId);
-        System.out.println(visit);
-        visit.setVisitStatus(VisitStatus.CANCELLED);
-        visitRepository.saveAndFlush(visit);
-        return modelMapper.map(visit, VisitDto.class);
-    }
+    public void cancelVisit(Long visitId){
+        Visit visit = visitRepository.findById(visitId).orElseThrow(() ->
+                new VisitNotFoundException("Cancel visit", "There is no visit with this id"));
+        if(visit.getVisitStatus().equals(VisitStatus.CANCELLED)){
+            throw new VisitStatusException("Cancel visit", "Visit is already canceled");
+        }
+        else if(visit.getVisitStatus().equals(VisitStatus.MISSED)){
+            throw new VisitStatusException("Cancel visit", "Visit is missed");
+        }
+        else if(visit.getVisitStatus().equals(VisitStatus.FINISHED)){
+            throw new VisitStatusException("Cancel visit", "Visit is finished");
+        }
+        else{
+            visit.setVisitStatus(VisitStatus.CANCELLED);
+            visitRepository.saveAndFlush(visit);
+            placeVaccineRepository.incrementQuantity(visit.getPlace().getId(), visit.getVaccine().getId());
+        }
 
+    }
+    @Transactional(readOnly = true)
     public List<VisitDto> findByPatientId(Long patientId){
         var visitDtoList = new TypeToken<List<VisitDto>>() {}.getType();
         return modelMapper.map(visitRepository.findAllByPatient_Id(patientId), visitDtoList);
