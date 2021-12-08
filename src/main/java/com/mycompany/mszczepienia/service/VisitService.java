@@ -1,12 +1,12 @@
 package com.mycompany.mszczepienia.service;
 
-import com.mycompany.mszczepienia.dto.place.PlaceDto;
 import com.mycompany.mszczepienia.dto.visit.CreateVisitDto;
 import com.mycompany.mszczepienia.dto.visit.FreeVisitsDto;
 import com.mycompany.mszczepienia.dto.visit.VisitDto;
 import com.mycompany.mszczepienia.exception.InvalidVisitException;
 import com.mycompany.mszczepienia.exception.UserNotFoundException;
 import com.mycompany.mszczepienia.exception.VaccineOutOfStockException;
+import com.mycompany.mszczepienia.exception.VisitNotFoundException;
 import com.mycompany.mszczepienia.model.Visit;
 import com.mycompany.mszczepienia.model.VisitStatus;
 import com.mycompany.mszczepienia.repository.*;
@@ -15,7 +15,6 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -116,13 +115,11 @@ public class VisitService {
     }
 
     @Transactional
-    public VisitDto cancelVisit(Long visitId){
-        System.out.println(visitId);
-        Visit visit = visitRepository.getById(visitId);
-        System.out.println(visit);
+    public void cancelVisit(Long visitId){
+        Visit visit = visitRepository.findById(visitId).orElseThrow(VisitNotFoundException :: new);
         visit.setVisitStatus(VisitStatus.CANCELLED);
         visitRepository.saveAndFlush(visit);
-        return modelMapper.map(visit, VisitDto.class);
+        placeVaccineRepository.incrementQuantity(visit.getPlace().getId(), visit.getVaccine().getId());
     }
 
     public List<VisitDto> findByPatientId(Long patientId){

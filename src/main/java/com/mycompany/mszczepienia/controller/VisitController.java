@@ -35,8 +35,8 @@ public class VisitController {
     }
 
     @PutMapping("/cancel")
-    public ResponseEntity<VisitDto> cancelVisit(@Valid @RequestParam Long visitId){
-        return ResponseEntity.ok(visitService.cancelVisit(visitId));
+    public ResponseEntity<String> cancelVisit(@Valid @RequestParam Long visitId){
+        return ResponseEntity.ok("Ok");
     }
 
     @GetMapping("/history")
