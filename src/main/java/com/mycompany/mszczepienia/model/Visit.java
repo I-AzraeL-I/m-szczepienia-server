@@ -36,9 +36,7 @@ import java.time.LocalTime;
         ),
         @NamedEntityGraph(
                 name = "visit.vaccine.disease+manufacturer",
-                attributeNodes = {
-                        @NamedAttributeNode(value = "vaccine", subgraph = "vaccineDetails")
-                },
+                attributeNodes = @NamedAttributeNode(value = "vaccine", subgraph = "vaccineDetails"),
                 subgraphs = {
                         @NamedSubgraph(
                                 name = "vaccineDetails",

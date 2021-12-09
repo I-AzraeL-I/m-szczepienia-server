@@ -54,7 +54,7 @@ public class JwtUtils {
     }
 
     public Long getIdFromJwt(String token) {
-        return (Long) getAllClaimsFromJwt(token).get(JwtProperties.TOKEN_CLAIM_USER_ID);
+        return Long.valueOf((String) getAllClaimsFromJwt(token).get(JwtProperties.TOKEN_CLAIM_USER_ID));
     }
 
     public boolean isJwtValid(String authToken) {
@@ -80,7 +80,7 @@ public class JwtUtils {
         return Jwts.builder()
                 .setSubject(userDto.getEmail())
                 .claim(JwtProperties.TOKEN_CLAIM_AUTHORITIES, List.of(userDto.getRole()))
-                .claim(JwtProperties.TOKEN_CLAIM_USER_ID, userDto.getId())
+                .claim(JwtProperties.TOKEN_CLAIM_USER_ID, userDto.getId().toString())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + tokenExpirationMs))
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
