@@ -19,9 +19,18 @@ public class ModeratorService {
     private final VisitRepository visitRepository;
     private final ModelMapper modelMapper;
 
-    @PreAuthorize("@moderatorAccess.isModerator(#placeId)")
-    public List<VisitWithVaccineAndPatientDto> findAllPendingVisits(Long placeId, LocalDate date) {
+    @PreAuthorize("@moderatorAccess.isModerator()")
+    public List<VisitWithVaccineAndPatientDto> findAllPendingVisits(Long moderatorId, LocalDate date) {
         var visitDtoListType = new TypeToken<List<VisitWithVaccineAndPatientDto>>() {}.getType();
-        return modelMapper.map(visitRepository.findAllByPlace_IdAndDateAndVisitStatusEquals(placeId, date, VisitStatus.PENDING), visitDtoListType);
+        return modelMapper.map(visitRepository.findAllByPlace_Moderator_IdAndDateAndVisitStatusEquals(moderatorId, date, VisitStatus.PENDING), visitDtoListType);
+    }
+
+    @PreAuthorize("@moderatorAccess.isModerator()")
+    public void acceptVisit(Long visitId) {
+        visitRepository.findById(visitId)
+                .filter(visit -> visit.getVisitStatus().equals(VisitStatus.PENDING))
+                .ifPresentOrElse(
+                        visit -> visit.setVisitStatus(VisitStatus.FINISHED),
+                        () -> {} /*todo wait for PR to throw*/);
     }
 }

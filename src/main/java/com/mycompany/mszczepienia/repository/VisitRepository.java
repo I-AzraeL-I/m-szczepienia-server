@@ -21,5 +21,5 @@ public interface VisitRepository extends JpaRepository<Visit, Long> {
     List<Visit> findAllByDateBeforeOrDateEqualsAndTimeBeforeAndVisitStatusEquals(LocalDate date, LocalDate date2, LocalTime time, VisitStatus visitStatus);
 
     @EntityGraph("visit.vaccine.disease+manufacturer")
-    List<Visit> findAllByPlace_IdAndDateAndVisitStatusEquals(Long placeId, LocalDate date, VisitStatus visitStatus);
+    List<Visit> findAllByPlace_Moderator_IdAndDateAndVisitStatusEquals(Long moderatorId, LocalDate date, VisitStatus visitStatus);
 }
