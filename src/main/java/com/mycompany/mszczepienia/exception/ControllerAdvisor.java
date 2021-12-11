@@ -30,14 +30,18 @@ public class ControllerAdvisor extends ResponseEntityExceptionHandler {
             UserAlreadyExistsException.class,
             PeselAlreadyExistsException.class,
             InvalidVisitException.class,
-            VaccineOutOfStockException.class
+            VaccineOutOfStockException.class,
+            VisitStatusException.class
     })
     public ResponseEntity<String> handleConflict(RuntimeException e) {
         log.error("{}", e.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
     }
 
-    @ExceptionHandler(UserNotFoundException.class)
+    @ExceptionHandler({
+            UserNotFoundException.class,
+            VisitNotFoundException.class
+    })
     public ResponseEntity<String> handleNotFound(RuntimeException e) {
         log.error("{}", e.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());

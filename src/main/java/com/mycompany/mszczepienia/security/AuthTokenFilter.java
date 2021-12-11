@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @Component
 @Slf4j
@@ -33,9 +34,9 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             if (jwt != null && jwtUtils.isJwtValid(jwt)) {
                 String subject = jwtUtils.getSubjectFromJwt(jwt);
                 List<GrantedAuthority> authorities = jwtUtils.getAuthoritiesFromJwt(jwt);
+                var credentials = Map.of(JwtProperties.TOKEN_CLAIM_USER_ID, jwtUtils.getIdFromJwt(jwt));
 
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                        subject, null, authorities);
+                var authentication = new UsernamePasswordAuthenticationToken(subject, credentials, authorities);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception e) {

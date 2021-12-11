@@ -3,8 +3,8 @@ package com.mycompany.mszczepienia.service;
 import com.mycompany.mszczepienia.dto.visit.CreateVisitDto;
 import com.mycompany.mszczepienia.dto.visit.FreeVisitsDto;
 import com.mycompany.mszczepienia.dto.visit.VisitDto;
+import com.mycompany.mszczepienia.dto.visit.VisitWithVaccineAndPlaceDto;
 import com.mycompany.mszczepienia.exception.*;
-import com.mycompany.mszczepienia.model.User;
 import com.mycompany.mszczepienia.model.Visit;
 import com.mycompany.mszczepienia.model.VisitStatus;
 import com.mycompany.mszczepienia.repository.*;
@@ -113,28 +113,24 @@ public class VisitService {
     }
 
     @Transactional
-    public void cancelVisit(Long visitId){
+    public void cancelVisit(Long visitId) {
         Visit visit = visitRepository.findById(visitId).orElseThrow(() ->
                 new VisitNotFoundException("Cancel visit", "There is no visit with this id"));
-        if(visit.getVisitStatus().equals(VisitStatus.CANCELLED)){
+        if (visit.getVisitStatus().equals(VisitStatus.CANCELLED)) {
             throw new VisitStatusException("Cancel visit", "Visit is already canceled");
-        }
-        else if(visit.getVisitStatus().equals(VisitStatus.MISSED)){
+        } else if (visit.getVisitStatus().equals(VisitStatus.MISSED)) {
             throw new VisitStatusException("Cancel visit", "Visit is missed");
-        }
-        else if(visit.getVisitStatus().equals(VisitStatus.FINISHED)){
+        } else if (visit.getVisitStatus().equals(VisitStatus.FINISHED)) {
             throw new VisitStatusException("Cancel visit", "Visit is finished");
-        }
-        else{
+        } else {
             visit.setVisitStatus(VisitStatus.CANCELLED);
-            visitRepository.saveAndFlush(visit);
             placeVaccineRepository.incrementQuantity(visit.getPlace().getId(), visit.getVaccine().getId());
         }
 
     }
     @Transactional(readOnly = true)
-    public List<VisitDto> findByPatientId(Long patientId){
-        var visitDtoList = new TypeToken<List<VisitDto>>() {}.getType();
+    public List<VisitWithVaccineAndPlaceDto> findByPatientId(Long patientId){
+        var visitDtoList = new TypeToken<List<VisitWithVaccineAndPlaceDto>>() {}.getType();
         return modelMapper.map(visitRepository.findAllByPatient_Id(patientId), visitDtoList);
     }
 

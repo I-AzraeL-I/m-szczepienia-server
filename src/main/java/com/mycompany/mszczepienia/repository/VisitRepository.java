@@ -14,10 +14,15 @@ import java.util.List;
 public interface VisitRepository extends JpaRepository<Visit, Long> {
 
     List<Visit> findAllByPlace_IdAndDateAndTimeAfterAndVisitStatusEquals(Long placeId, LocalDate date, LocalTime time, VisitStatus visitStatus);
+
+    @EntityGraph("visit.vaccine.(disease+manufacturer)+place")
     List<Visit> findAllByPatient_Id(Long patientId);
+
     boolean existsByDateAndTimeAndVisitStatus(LocalDate date, LocalTime time, VisitStatus visitStatus);
 
     @EntityGraph("visit.vaccine+place")
     List<Visit> findAllByDateBeforeOrDateEqualsAndTimeBeforeAndVisitStatusEquals(LocalDate date, LocalDate date2, LocalTime time, VisitStatus visitStatus);
 
+    @EntityGraph("visit.vaccine.disease+manufacturer")
+    List<Visit> findAllByPlace_Moderator_IdAndDateAndVisitStatusEquals(Long moderatorId, LocalDate date, VisitStatus visitStatus);
 }
