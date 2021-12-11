@@ -51,7 +51,6 @@ public class GenerateData {
             user.setPassword(passwordEncoder.encode(userObject.get("password").toString()));
             user.setRole(Role.USER.withPrefix());
             userRepository.save(user);
-            System.out.println("Elo");
             Patient patient = new Patient();
             Address address = new Address();
             address.setStreet(addressObject.get("street").toString());

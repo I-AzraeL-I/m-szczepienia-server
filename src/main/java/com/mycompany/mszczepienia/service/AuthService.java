@@ -1,10 +1,7 @@
 package com.mycompany.mszczepienia.service;
 
 import com.mycompany.mszczepienia.dto.auth.*;
-import com.mycompany.mszczepienia.exception.PeselAlreadyExistsException;
-import com.mycompany.mszczepienia.exception.TokenRefreshException;
-import com.mycompany.mszczepienia.exception.UserAlreadyExistsException;
-import com.mycompany.mszczepienia.exception.UserNotFoundException;
+import com.mycompany.mszczepienia.exception.*;
 import com.mycompany.mszczepienia.model.Patient;
 import com.mycompany.mszczepienia.model.User;
 import com.mycompany.mszczepienia.repository.PatientRepository;
@@ -104,5 +101,12 @@ public class AuthService {
                 .accessToken(jwt)
                 .refreshToken(refreshToken)
                 .build();
+    }
+    @Transactional
+    public void updatePassword(UpdatePasswordDto forgotPasswordDto){
+        User user = userRepository.findByEmail(forgotPasswordDto.getEmail()).orElseThrow(() ->
+                    new UserNotFoundException("Reset password", "There is no user with this email"));
+        user.setPassword(passwordEncoder.encode(forgotPasswordDto.getPassword()));
+        userRepository.save(user);
     }
 }
