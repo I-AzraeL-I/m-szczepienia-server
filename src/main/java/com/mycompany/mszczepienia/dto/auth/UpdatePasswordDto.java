@@ -9,9 +9,11 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 public class UpdatePasswordDto {
+
     @Email
     @Size(min = 3, max = 100, message = "Email length must be between {min} and {max}")
-    String email;
+    private String email;
+
     @Size(min = 8, max = 100, message = "Password length must be between {min} and {max}")
-    String password;
+    private String password;
 }

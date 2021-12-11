@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -112,6 +113,7 @@ public class VisitService {
         });
     }
 
+    @PreAuthorize("visitAccess.isOwner(#visitId)")
     @Transactional
     public void cancelVisit(Long visitId) {
         Visit visit = visitRepository.findById(visitId).orElseThrow(() ->
@@ -128,8 +130,10 @@ public class VisitService {
         }
 
     }
+
+    @PreAuthorize("visitAccess.isPatient(#patientId)")
     @Transactional(readOnly = true)
-    public List<VisitWithVaccineAndPlaceDto> findByPatientId(Long patientId){
+    public List<VisitWithVaccineAndPlaceDto> findByPatientId(Long patientId) {
         var visitDtoList = new TypeToken<List<VisitWithVaccineAndPlaceDto>>() {}.getType();
         return modelMapper.map(visitRepository.findAllByPatient_Id(patientId), visitDtoList);
     }

@@ -10,6 +10,7 @@ import com.mycompany.mszczepienia.security.JwtUtils;
 import com.mycompany.mszczepienia.security.Role;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
@@ -102,11 +103,12 @@ public class AuthService {
                 .refreshToken(refreshToken)
                 .build();
     }
+
+    @PreAuthorize("#forgotPasswordDto.email == authentication.principal")
     @Transactional
-    public void updatePassword(UpdatePasswordDto forgotPasswordDto){
+    public void updatePassword(UpdatePasswordDto forgotPasswordDto) {
         User user = userRepository.findByEmail(forgotPasswordDto.getEmail()).orElseThrow(() ->
                     new UserNotFoundException("Reset password", "There is no user with this email"));
         user.setPassword(passwordEncoder.encode(forgotPasswordDto.getPassword()));
-        userRepository.save(user);
     }
 }
