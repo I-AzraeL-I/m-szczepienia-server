@@ -3,15 +3,15 @@ package com.mycompany.mszczepienia.service;
 import com.mycompany.mszczepienia.dto.visit.CreateVisitDto;
 import com.mycompany.mszczepienia.dto.visit.FreeVisitsDto;
 import com.mycompany.mszczepienia.dto.visit.VisitDto;
-import com.mycompany.mszczepienia.exception.InvalidVisitException;
-import com.mycompany.mszczepienia.exception.UserNotFoundException;
-import com.mycompany.mszczepienia.exception.VaccineOutOfStockException;
+import com.mycompany.mszczepienia.exception.*;
+import com.mycompany.mszczepienia.model.User;
 import com.mycompany.mszczepienia.model.Visit;
 import com.mycompany.mszczepienia.model.VisitStatus;
 import com.mycompany.mszczepienia.repository.*;
 import com.mycompany.mszczepienia.util.RangeParser;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -112,6 +112,32 @@ public class VisitService {
         });
     }
 
+    @Transactional
+    public void cancelVisit(Long visitId){
+        Visit visit = visitRepository.findById(visitId).orElseThrow(() ->
+                new VisitNotFoundException("Cancel visit", "There is no visit with this id"));
+        if(visit.getVisitStatus().equals(VisitStatus.CANCELLED)){
+            throw new VisitStatusException("Cancel visit", "Visit is already canceled");
+        }
+        else if(visit.getVisitStatus().equals(VisitStatus.MISSED)){
+            throw new VisitStatusException("Cancel visit", "Visit is missed");
+        }
+        else if(visit.getVisitStatus().equals(VisitStatus.FINISHED)){
+            throw new VisitStatusException("Cancel visit", "Visit is finished");
+        }
+        else{
+            visit.setVisitStatus(VisitStatus.CANCELLED);
+            visitRepository.saveAndFlush(visit);
+            placeVaccineRepository.incrementQuantity(visit.getPlace().getId(), visit.getVaccine().getId());
+        }
+
+    }
+    @Transactional(readOnly = true)
+    public List<VisitDto> findByPatientId(Long patientId){
+        var visitDtoList = new TypeToken<List<VisitDto>>() {}.getType();
+        return modelMapper.map(visitRepository.findAllByPatient_Id(patientId), visitDtoList);
+    }
+
     private boolean isVaccineInStock(Long placeId, Long vaccineId) {
         return placeVaccineRepository.existsByPlace_IdAndVaccine_IdAndQuantityIsGreaterThan(placeId, vaccineId, 0);
     }
@@ -123,7 +149,6 @@ public class VisitService {
     private boolean isVisitInFuture(CreateVisitDto createVisitDto) {
         return LocalDateTime.of(createVisitDto.getDate(), createVisitDto.getTime()).isAfter(LocalDateTime.now(ZoneId.of(usedTimezone)));
     }
-
     private LocalTime adjustStartHour(LocalTime time) {
         int minutes = (int) (Math.ceil((float) time.getMinute() / visitLengthMin) * visitLengthMin);
         return time.truncatedTo(ChronoUnit.MINUTES).withMinute(minutes);
