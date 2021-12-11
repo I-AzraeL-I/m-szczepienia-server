@@ -1,10 +1,9 @@
 package com.mycompany.mszczepienia.controller;
 
-import com.mycompany.mszczepienia.dto.place.PlaceDto;
 import com.mycompany.mszczepienia.dto.visit.CreateVisitDto;
 import com.mycompany.mszczepienia.dto.visit.FreeVisitsDto;
 import com.mycompany.mszczepienia.dto.visit.VisitDto;
-import com.mycompany.mszczepienia.model.Visit;
+import com.mycompany.mszczepienia.dto.visit.VisitWithVaccineAndPlaceDto;
 import com.mycompany.mszczepienia.service.VisitService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -35,13 +34,13 @@ public class VisitController {
     }
 
     @PutMapping("/cancel")
-    public ResponseEntity<String> cancelVisit(@Valid @RequestParam Long visitId){
+    public ResponseEntity<String> cancelVisit(@RequestParam Long visitId) {
         visitService.cancelVisit(visitId);
         return ResponseEntity.ok("Ok");
     }
 
     @GetMapping("/history")
-    public ResponseEntity<List<VisitDto>> getVisitByPatientId(@RequestParam Long patientId) {
+    public ResponseEntity<List<VisitWithVaccineAndPlaceDto>> getVisitByPatientId(@RequestParam Long patientId) {
         return ResponseEntity.ok(visitService.findByPatientId(patientId));
     }
 }

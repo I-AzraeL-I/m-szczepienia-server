@@ -32,7 +32,7 @@ public class AuthController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<String> updatePassword(@Valid @RequestBody UpdatePasswordDto updatePasswordDto){
+    public ResponseEntity<String> updatePassword(@Valid @RequestBody UpdatePasswordDto updatePasswordDto) {
         authService.updatePassword(updatePasswordDto);
         return ResponseEntity.ok("Ok");
     }
