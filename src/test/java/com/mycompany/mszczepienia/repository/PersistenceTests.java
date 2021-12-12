@@ -61,16 +61,6 @@ class PersistenceTests {
 
     @Test
     public void testAddPatient() {
-        final String cityName = "Warszawa";
-        var voivodeship = new Voivodeship();
-        voivodeship.setName("Mazowieckie");
-        entityManager.persist(voivodeship);
-        entityManager.flush();
-        var city = new City();
-        city.setName(cityName);
-        city.setVoivodeship(voivodeship);
-        var persistedCity = cityRepository.saveAndFlush(city);
-
         final String email = "email@email.com";
         final String password = "password";
         final String role = "ROLE_USER";
@@ -80,18 +70,10 @@ class PersistenceTests {
         user.setRole(role);
         var persistedUser = userRepository.saveAndFlush(user);
 
-        final String street = "Polna";
-        final String number = "1A";
-        var address = new Address();
-        address.setCity(persistedCity);
-        address.setStreet(street);
-        address.setNumber(number);
-
         final String firstName = "Jan";
         final String lastName = "Kowalski";
         final String pesel = "81091299465";
         var patient = new Patient();
-        patient.setAddress(address);
         patient.setFirstName(firstName);
         patient.setLastName(lastName);
         patient.setPesel(pesel);
@@ -105,9 +87,6 @@ class PersistenceTests {
         assertEquals(firstName, patients.get(0).getFirstName());
         assertEquals(lastName, patients.get(0).getLastName());
         assertEquals(pesel, patients.get(0).getPesel());
-        assertEquals(street, patients.get(0).getAddress().getStreet());
-        assertEquals(number, patients.get(0).getAddress().getNumber());
-        assertEquals(cityName, patients.get(0).getAddress().getCity().getName());
     }
 
 }
