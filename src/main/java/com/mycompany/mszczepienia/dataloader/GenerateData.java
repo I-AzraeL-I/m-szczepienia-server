@@ -1,3 +1,4 @@
+
 package com.mycompany.mszczepienia.dataloader;
 
 import com.mycompany.mszczepienia.model.*;
@@ -14,6 +15,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Random;
 
 @Component
@@ -52,11 +54,7 @@ public class GenerateData {
             user.setRole(Role.USER.withPrefix());
             userRepository.save(user);
             Patient patient = new Patient();
-            Address address = new Address();
-            address.setStreet(addressObject.get("street").toString());
-            address.setNumber(addressObject.get("number").toString());
-            address.setCity(cities.get(random.nextInt(cities.size())));
-            patient.setAddress(address);
+            patient.setMainProfile(true);
             patient.setFirstName(patientObject.get("firstName").toString());
             patient.setLastName(patientObject.get("lastName").toString());
             patient.setPesel(patientObject.get("pesel").toString());
@@ -82,11 +80,17 @@ public class GenerateData {
         for (Object o : Objects.requireNonNull(jsonArray)) {
             JSONObject jsonObject = (JSONObject) o;
             City city = new City();
-            Voivodeship voivodeship = new Voivodeship();
-            voivodeship.setName(jsonObject.get("voivodeship").toString());
-            voivodeshipRepository.save(voivodeship);
+            Optional<Voivodeship> voivodeship = voivodeshipRepository.findByName(jsonObject.get("voivodeship").toString());
+            if(voivodeship.isPresent()){
+                city.setVoivodeship(voivodeship.get());
+            }
+            else {
+                Voivodeship newVoivodeship = new Voivodeship();
+                newVoivodeship.setName(jsonObject.get("voivodeship").toString());
+                voivodeshipRepository.save(newVoivodeship);
+                city.setVoivodeship(newVoivodeship);
+            }
             city.setName(jsonObject.get("city").toString());
-            city.setVoivodeship(voivodeship);
             cityRepository.save(city);
         }
     }
@@ -114,6 +118,7 @@ public class GenerateData {
     public void generatePlace() {
         List<City> cities = cityRepository.findAll();
         List<Vaccine> vaccines = vaccineRepository.findAll();
+        List<User> moderators = userRepository.findAllByRole(Role.MODERATOR.withPrefix());
         JSONArray jsonArray = Generator.getUsersArray(addressPlaceData);
         for (Object o : Objects.requireNonNull(jsonArray)) {
             JSONObject jsonObject = (JSONObject) o;
@@ -125,6 +130,7 @@ public class GenerateData {
             Place place = new Place();
             place.setAddress(address);
             place.setName(jsonObject.get("name").toString());
+            place.setModerator(moderators.get(random.nextInt(moderators.size())));
             for (int i = 0; i < random.nextInt(vaccines.size()); i++) {
                 place.addVaccine(vaccines.get(i), random.nextInt(100));
             }

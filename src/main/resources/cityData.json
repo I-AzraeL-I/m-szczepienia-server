@@ -1,203 +1,155 @@
-{ 
-"objects":[ 
-{ 
-"city":"Lyon",
-"voivodeship":"Massachussets"
-},
-{ 
-"city":"Fremont",
-"voivodeship":"California"
-},
-{ 
-"city":"New Orleans",
-"voivodeship":"Iowa"
-},
-{ 
-"city":"Indianapolis",
-"voivodeship":"Louisiana"
-},
-{ 
-"city":"Berlin",
-"voivodeship":"California"
-},
-{ 
-"city":"Bucharest",
-"voivodeship":"Tennessee"
-},
-{ 
-"city":"Charlotte",
-"voivodeship":"Hawaii"
-},
-{ 
-"city":"Ontario",
-"voivodeship":"Idaho"
-},
-{ 
-"city":"Washington",
-"voivodeship":"Utah"
-},
-{ 
-"city":"Garland",
-"voivodeship":"Texas"
-},
-{ 
-"city":"Otawa",
-"voivodeship":"Mississippi"
-},
-{ 
-"city":"Springfield",
-"voivodeship":"Wyoming"
-},
-{ 
-"city":"San Antonio",
-"voivodeship":"Mississippi"
-},
-{ 
-"city":"San Antonio",
-"voivodeship":"New Hampshire"
-},
-{ 
-"city":"Fullerton",
-"voivodeship":"Ohio"
-},
-{ 
-"city":"Berna",
-"voivodeship":"Louisiana"
-},
-{ 
-"city":"Houston",
-"voivodeship":"Nevada"
-},
-{ 
-"city":"San Francisco",
-"voivodeship":"Mississippi"
-},
-{ 
-"city":"New Orleans",
-"voivodeship":"Louisiana"
-},
-{ 
-"city":"Jersey City",
-"voivodeship":"Idaho"
-},
-{ 
-"city":"Fremont",
-"voivodeship":"Minnesota"
-},
-{ 
-"city":"Salem",
-"voivodeship":"South Dakota"
-},
-{ 
-"city":"Louisville",
-"voivodeship":"Illinois"
-},
-{ 
-"city":"Paris",
-"voivodeship":"Texas"
-},
-{ 
-"city":"Las Vegas",
-"voivodeship":"North Carolina"
-},
-{ 
-"city":"Amarillo",
-"voivodeship":"Tennessee"
-},
-{ 
-"city":"Norfolk",
-"voivodeship":"South Dakota"
-},
-{ 
-"city":"Charlotte",
-"voivodeship":"Utah"
-},
-{ 
-"city":"Murfreesboro",
-"voivodeship":"Florida"
-},
-{ 
-"city":"Long Beach",
-"voivodeship":"Kentucky"
-},
-{ 
-"city":"Chicago",
-"voivodeship":"North Dakota"
-},
-{ 
-"city":"Glendale",
-"voivodeship":"Massachussets"
-},
-{ 
-"city":"Reno",
-"voivodeship":"Utah"
-},
-{ 
-"city":"Lakewood",
-"voivodeship":"Rhode Island"
-},
-{ 
-"city":"Omaha",
-"voivodeship":"Virginia"
-},
-{ 
-"city":"Milwaukee",
-"voivodeship":"Georgia"
-},
-{ 
-"city":"Fullerton",
-"voivodeship":"South Carolina"
-},
-{ 
-"city":"Henderson",
-"voivodeship":"Idaho"
-},
-{ 
-"city":"Omaha",
-"voivodeship":"Texas"
-},
-{ 
-"city":"Prague",
-"voivodeship":"Vermont"
-},
-{ 
-"city":"Fremont",
-"voivodeship":"Oregon"
-},
-{ 
-"city":"San Jose",
-"voivodeship":"Ohio"
-},
-{ 
-"city":"Milwaukee",
-"voivodeship":"Nebraska"
-},
-{ 
-"city":"San Antonio",
-"voivodeship":"Arkansas"
-},
-{ 
-"city":"Bucharest",
-"voivodeship":"California"
-},
-{ 
-"city":"Garland",
-"voivodeship":"North Dakota"
-},
-{ 
-"city":"Berna",
-"voivodeship":"Wisconsin"
-},
-{ 
-"city":"Bakersfield",
-"voivodeship":"Michigan"
-},
-{ 
-"city":"Garland",
-"voivodeship":"Iowa"
-},
-{ 
-"city":"Fullerton",
-"voivodeship":"Utah"
-}
-]}
+{
+  "objects":[
+    {
+      "city":"Lubin",
+      "voivodeship":"Dolnoslaskie"
+    },
+    {
+      "city":"Warszawa",
+      "voivodeship":"Mazowieckie"
+    },
+    {
+      "city":"Krakow",
+      "voivodeship":"Malopolskie"
+    },
+    {
+      "city":"Lodz",
+      "voivodeship":"Lodzkie"
+    },
+    {
+      "city":"Wroclaw",
+      "voivodeship":"Dolnoslaskie"
+    },
+    {
+      "city":"Poznan",
+      "voivodeship":"Wielkopolskie"
+    },
+    {
+      "city":"Gdansk",
+      "voivodeship":"Pomorskie"
+    },
+    {
+      "city":"Szczecin",
+      "voivodeship":"Zachodniopomorskie"
+    },
+    {
+      "city":"Bydgoszcz",
+      "voivodeship":"Kujawsko-pomorskie"
+    },
+    {
+      "city":"Lublin",
+      "voivodeship":"Lubelskie"
+    },
+    {
+      "city":"Bialystok",
+      "voivodeship":"Podlaskie"
+    },
+    {
+      "city":"Katowice",
+      "voivodeship":"Slaskie"
+    },
+    {
+      "city":"Gdynia",
+      "voivodeship":"Pomorskie"
+    },
+    {
+      "city":"Czestochowa",
+      "voivodeship":"Slaskie"
+    },
+    {
+      "city":"Radom",
+      "voivodeship":"Mazowieckie"
+    },
+    {
+      "city":"Torun",
+      "voivodeship":"Kujawsko-pomorskie"
+    },
+    {
+      "city":"Sosnowiec",
+      "voivodeship":"Slaskie"
+    },
+    {
+      "city":"Rzeszow",
+      "voivodeship":"Podkarpackie"
+    },
+    {
+      "city":"Kielce",
+      "voivodeship":"Swietokrzyskie"
+    },
+    {
+      "city":"Gliwice",
+      "voivodeship":"Slaskie"
+    },
+    {
+      "city":"Olsztyn",
+      "voivodeship":"Warminsko-mazurskie"
+    },
+    {
+      "city":"Zabrze",
+      "voivodeship":"Slaskie"
+    },
+    {
+      "city":"Bielsko-Biala",
+      "voivodeship":"Slaskie"
+    },
+    {
+      "city":"Bytom",
+      "voivodeship":"Slaskie"
+    },
+    {
+      "city":"Zielona Gora",
+      "voivodeship":"Lubuskie"
+    },
+    {
+      "city":"Rybnik",
+      "voivodeship":"Slaskie"
+    },
+    {
+      "city":"Opole",
+      "voivodeship":"Opolskie"
+    },
+    {
+      "city":"Tychy",
+      "voivodeship":"Slaskie"
+    },
+    {
+      "city":"Gorzow Wielkopolski",
+      "voivodeship":"Lubuskie"
+    },
+    {
+      "city":"Elblag",
+      "voivodeship":"Warminsko-mazurskie"
+    },
+    {
+      "city":"Dabrowa Gornicza",
+      "voivodeship":"Slaskie"
+    },
+    {
+      "city":"Plock",
+      "voivodeship":"Mazowieckie"
+    },
+    {
+      "city":"Walbrzych",
+      "voivodeship":"Dolnoslaskie"
+    },
+    {
+      "city":"Chorzow",
+      "voivodeship":"Slaskie"
+    },
+    {
+      "city":"Koszalin",
+      "voivodeship":"Wielkopolskie"
+    },
+    {
+      "city":"Legnica",
+      "voivodeship":"Dolnoslaskie"
+    },
+    {
+      "city":"Piotrkow Trybunalski",
+      "voivodeship":"Lodzkie"
+    },
+    {
+      "city":"Ostrowiec Swietokrzyski",
+      "voivodeship":"Swietokrzyskie"
+    }
+  ]}
