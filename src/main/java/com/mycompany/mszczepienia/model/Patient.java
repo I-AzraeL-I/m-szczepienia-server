@@ -35,10 +35,6 @@ public class Patient {
     @Column(nullable = false)
     private boolean isMainProfile;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "address_id")
-    private Address address;
-
     @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<Visit> visits = new ArrayList<>();
 
