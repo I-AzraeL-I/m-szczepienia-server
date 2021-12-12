@@ -7,6 +7,7 @@ import com.mycompany.mszczepienia.security.Role;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -42,12 +44,9 @@ public class GenerateData {
     public void generateUsers() {
         JSONArray userData = Generator.getUsersArray(this.userData);
         JSONArray patientData = Generator.getUsersArray(this.patientData);
-        JSONArray addressData = Generator.getUsersArray(this.addressUserData);
-        List<City> cities = cityRepository.findAll();
         for (int i = 0; i < Objects.requireNonNull(userData).size() - 4; i++) {
             JSONObject userObject = (JSONObject) userData.get(i);
             JSONObject patientObject = (JSONObject) patientData.get(i);
-            JSONObject addressObject = (JSONObject) addressData.get(i);
             User user = new User();
             user.setEmail(userObject.get("email").toString());
             user.setPassword(passwordEncoder.encode(userObject.get("password").toString()));
@@ -66,11 +65,7 @@ public class GenerateData {
             User user = new User();
             user.setEmail(jsonObject.get("email").toString());
             user.setPassword(passwordEncoder.encode(jsonObject.get("password").toString()));
-            if (i % 2 == 0) {
-                user.setRole(Role.MODERATOR.withPrefix());
-            } else {
-                user.setRole(Role.ADMIN.withPrefix());
-            }
+            user.setRole(Role.ADMIN.withPrefix());
             userRepository.save(user);
         }
     }
@@ -118,7 +113,6 @@ public class GenerateData {
     public void generatePlace() {
         List<City> cities = cityRepository.findAll();
         List<Vaccine> vaccines = vaccineRepository.findAll();
-        List<User> moderators = userRepository.findAllByRole(Role.MODERATOR.withPrefix());
         JSONArray jsonArray = Generator.getUsersArray(addressPlaceData);
         for (Object o : Objects.requireNonNull(jsonArray)) {
             JSONObject jsonObject = (JSONObject) o;
@@ -130,7 +124,12 @@ public class GenerateData {
             Place place = new Place();
             place.setAddress(address);
             place.setName(jsonObject.get("name").toString());
-            place.setModerator(moderators.get(random.nextInt(moderators.size())));
+            User moderator = new User();
+            moderator.setRole(Role.MODERATOR.withPrefix());
+            moderator.setPassword(passwordEncoder.encode("password"));
+            moderator.setEmail(place.getName() + "@moderator.com");
+            userRepository.save(moderator);
+            place.setModerator(moderator);
             for (int i = 0; i < random.nextInt(vaccines.size()); i++) {
                 place.addVaccine(vaccines.get(i), random.nextInt(100));
             }
