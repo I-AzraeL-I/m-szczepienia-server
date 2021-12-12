@@ -65,7 +65,7 @@ public class GenerateData {
             JSONObject jsonObject = (JSONObject) userData.get(i);
             User user = new User();
             user.setEmail(jsonObject.get("email").toString());
-            user.setPassword(jsonObject.get("password").toString());
+            user.setPassword(passwordEncoder.encode(jsonObject.get("password").toString()));
             if (i % 2 == 0) {
                 user.setRole(Role.MODERATOR.withPrefix());
             } else {
