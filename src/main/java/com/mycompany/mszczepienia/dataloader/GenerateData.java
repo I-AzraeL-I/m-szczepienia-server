@@ -130,8 +130,8 @@ public class GenerateData {
             moderator.setEmail(place.getName() + "@moderator.com");
             userRepository.save(moderator);
             place.setModerator(moderator);
-            for (int i = 0; i < random.nextInt(vaccines.size()); i++) {
-                place.addVaccine(vaccines.get(i), random.nextInt(100));
+            for (Vaccine vaccine : vaccines) {
+                place.addVaccine(vaccine, random.nextInt(100));
             }
             placeRepository.save(place);
         }
