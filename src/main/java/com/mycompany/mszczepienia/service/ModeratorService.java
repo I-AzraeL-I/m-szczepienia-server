@@ -7,6 +7,7 @@ import com.mycompany.mszczepienia.repository.VisitRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +26,8 @@ public class ModeratorService {
     @Transactional(readOnly = true)
     public List<VisitWithVaccineAndPatientDto> findAllPendingVisits(Long moderatorId, LocalDate date) {
         var visitDtoListType = new TypeToken<List<VisitWithVaccineAndPatientDto>>() {}.getType();
-        return modelMapper.map(visitRepository.findAllByPlace_Moderator_IdAndDateAndVisitStatusEquals(moderatorId, date, VisitStatus.PENDING), visitDtoListType);
+        var sort = Sort.by("date").descending().and(Sort.by("time")).descending();
+        return modelMapper.map(visitRepository.findAllByPlace_Moderator_IdAndDateAndVisitStatusEquals(moderatorId, date, VisitStatus.PENDING, sort), visitDtoListType);
     }
 
     @PreAuthorize("@moderatorAccess.isModerator()")

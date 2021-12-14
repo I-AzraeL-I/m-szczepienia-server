@@ -4,6 +4,7 @@ import com.mycompany.mszczepienia.dto.visit.CreateVisitDto;
 import com.mycompany.mszczepienia.dto.visit.FreeVisitsDto;
 import com.mycompany.mszczepienia.dto.visit.VisitDto;
 import com.mycompany.mszczepienia.dto.visit.VisitWithVaccineAndPlaceDto;
+import com.mycompany.mszczepienia.model.VisitStatus;
 import com.mycompany.mszczepienia.service.VisitService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -40,7 +42,12 @@ public class VisitController {
     }
 
     @GetMapping("/history")
-    public ResponseEntity<List<VisitWithVaccineAndPlaceDto>> getVisitByPatientId(@RequestParam Long patientId) {
-        return ResponseEntity.ok(visitService.findByPatientId(patientId));
+    public ResponseEntity<List<VisitWithVaccineAndPlaceDto>> getVisitByPatientId(
+            @RequestParam Long patientId,
+            @RequestParam(required = false) List<VisitStatus> statuses) {
+        if (statuses == null) {
+            statuses = Arrays.asList(VisitStatus.values());
+        }
+        return ResponseEntity.ok(visitService.findByPatientId(patientId, statuses));
     }
 }

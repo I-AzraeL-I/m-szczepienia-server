@@ -23,7 +23,7 @@ import java.util.Objects;
                         attributeNodes = @NamedAttributeNode(value = "city", subgraph = "city.voivodeship")),
                 @NamedSubgraph(
                         name = "city.voivodeship",
-                        attributeNodes = @NamedAttributeNode("voivodeship"))
+                        attributeNodes = @NamedAttributeNode("voivodeship")),
         }
 )
 public class Place {

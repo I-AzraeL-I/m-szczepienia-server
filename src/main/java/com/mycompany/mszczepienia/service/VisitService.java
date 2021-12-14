@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -133,9 +134,10 @@ public class VisitService {
 
     @PreAuthorize("@visitAccess.isPatient(#patientId)")
     @Transactional(readOnly = true)
-    public List<VisitWithVaccineAndPlaceDto> findByPatientId(Long patientId) {
+    public List<VisitWithVaccineAndPlaceDto> findByPatientId(Long patientId, List<VisitStatus> statuses) {
         var visitDtoList = new TypeToken<List<VisitWithVaccineAndPlaceDto>>() {}.getType();
-        return modelMapper.map(visitRepository.findAllByPatient_Id(patientId), visitDtoList);
+        var sort = Sort.by("date").descending().and(Sort.by("time")).descending();
+        return modelMapper.map(visitRepository.findAllByPatient_IdAndVisitStatusIn(patientId, statuses, sort), visitDtoList);
     }
 
     private boolean isVaccineInStock(Long placeId, Long vaccineId) {
