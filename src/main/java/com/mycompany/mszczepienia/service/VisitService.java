@@ -113,7 +113,7 @@ public class VisitService {
         });
     }
 
-    @PreAuthorize("visitAccess.isOwner(#visitId)")
+    @PreAuthorize("@visitAccess.isOwner(#visitId)")
     @Transactional
     public void cancelVisit(Long visitId) {
         Visit visit = visitRepository.findById(visitId).orElseThrow(() ->
@@ -131,7 +131,7 @@ public class VisitService {
 
     }
 
-    @PreAuthorize("visitAccess.isPatient(#patientId)")
+    @PreAuthorize("@visitAccess.isPatient(#patientId)")
     @Transactional(readOnly = true)
     public List<VisitWithVaccineAndPlaceDto> findByPatientId(Long patientId) {
         var visitDtoList = new TypeToken<List<VisitWithVaccineAndPlaceDto>>() {}.getType();
